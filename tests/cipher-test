@@ -1,0 +1,7 @@
+#!/bin/sh
+#
+
+printenv
+rm -f cipher-test.out
+./m209/m209 -q -t ${srcdir}/tests -a -d < ${srcdir}/tests/cipher.txt > cipher-test.out
+diff -q ${srcdir}/tests/deciphered.txt cipher-test.out

@@ -1,0 +1,397 @@
+.\" **************************************************************************
+.\"  Copyright (C) 2009-2013 Mark J. Blair, NF6X
+.\"
+.\"  This file is part of Hagelin
+.\"
+.\"   Hagelin is free software: you can redistribute it and/or modify
+.\"   it under the terms of the GNU General Public License as published by
+.\"   the Free Software Foundation, either version 3 of the License, or
+.\"   (at your option) any later version.
+.\"
+.\"   Hagelin is distributed in the hope that it will be useful,
+.\"   but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"   GNU General Public License for more details.
+.\"
+.\"   You should have received a copy of the GNU General Public License
+.\"   along with Hagelin.  If not, see <http://www.gnu.org/licenses/>.
+.\" **************************************************************************
+.TH m209 1 "" "Version !VERSION!" "USER COMMANDS"
+.
+.SH NAME
+m209 \- simulate the M-209 Converter
+.
+.SH SYNOPSIS
+.HP
+.B m209
+.RB [ \-v ]
+.RB [ \-q ]
+.BR \-c | \-d
+.RB [ \-k
+.IR KeyFile ]
+.RB [ \-i
+.I i1 i2 i3 i4 i5
+.IR i6 ]
+.RB [ \-s
+.IR n ]
+.br
+.B <
+.I InFile
+.B >
+.I OutFile
+.br
+.HP
+.B m209
+.RB [ \-v ]
+.RB [ \-q ]
+.BR \-c | \-d
+.B \-a
+.RB [ \-k
+.IR KeyFile ]
+.RB [ \-l
+.IR KeyListIndicator ]
+.br
+.RB [ \-n
+.IR NetIndicator ]
+.RB [ \-t
+.IR KeyFileDir ]
+.B <
+.I InFile
+.B >
+.I OutFile
+.br
+.HP
+.B m209
+.RB [ \-v ]
+.RB [ \-q ]
+.B \-g \-p
+.RB [ \-l
+.IR KeyListIndicator ]
+.RB [ \-n
+.IR NetIndicator ]
+.B >
+.I KeyFile
+.
+.SH DESCRIPTION
+.B m209
+simulates the operation of the M\-209 Converter, a cipher
+machine used during World War 2 and the Korean War by U.S. military
+forces for encryption of low-level traffic.
+.
+The Army versions included the M\-209, M\-209\-A and M\-209\-B, while
+the Navy called this machine the CSP\-1500.
+.
+This machine was designed by Swedish cryptographer Boris Hagelin, and
+shares its operating principles with various other cipher machines
+which are collectively referred to as "pin and lug" machines.
+.
+.PP
+In addition to simulating the operation of the M\-209 Converter,
+.B m209
+can also generate random key settings and automate certain
+tedious operating procedures.
+.PP
+The M-209 Converter only enciphers and deciphers the letters 'A'
+through 'Z'.
+.
+Numbers or punctuation must be spelled out.
+.
+When enciphering, the operator substitutes the letter 'Z' where a
+space is desired.
+.
+When deciphering, the machine prints a space instead of the
+letter 'Z', and the operator must infer any actual 'Z' letters from
+context.
+.
+.SH OPTIONS
+.
+.TP
+.B \-a
+Automatically generate or extract message indicators in cipher
+.RB ( \-c )
+or decipher
+.RB ( \-d )
+modes, respectively.
+.br
+
+.br
+In cipher mode, if a Key List Indicator (a two-letter string) is
+specified with the
+.B \-l
+option,
+.B m209
+will automatically try to load a key file named either
+.IR KeyListIndicator .txt
+or
+.IR KeyListIndicator .m209key
+in the directory specified with the
+.B \-t
+option. If a net indicator is either specified with the
+.B \-n
+option or is found in the key file, then a line will be added 
+to the beginning of the ciphertext containing the net indicator,
+text " GR ", and the group count of the ciphertext.
+.
+Message indicators will be included in the ciphertext using the
+protocol specified in the Signal Corps training film TF 11\-1400
+.IR "M-209 Converter",
+and initial key wheel settings will be randomly generated.
+The net indicator line is an new addition to the original WW2-era
+message format, provided as an aid to collectors who wish to publish
+their own key lists without worrying about duplicating key list
+indicators used by other collectors.
+.br
+
+.br
+In decipher mode,
+.B m209
+expects to find valid message indicators in the ciphertext, and will
+automatically extract the initial key wheel settings.
+.
+The key list indicator is automatically extracted from the ciphertext,
+and
+.B m209
+will automatically try to load a key list file named either
+.IR KeyListIndicator .txt
+or
+.IR KeyListIndicator .m209key
+in the directory specified with the
+.B \-t
+option.
+.br
+
+.br
+In either case, a default key setting may be specified with the
+.B \-k
+option, and it will be used if a key file cannot be loaded automatically.
+.
+.TP
+.B \-c
+Cipher mode: Read plaintext from stdin, encipher it, and write
+ciphertext to stdout.
+.
+.TP
+.B \-d
+Decipher mode: Read ciphertext from stdin, decipher it, and write
+plaintext to stdout. Ignore first line that appears to contain a
+net indicator and group count, if present.
+.
+.TP
+.B \-g
+Generate random key setting. Use the
+.B \-p
+option to write the resulting key setting to stdout.
+.
+.TP
+.BI \-i " i1 i2 i3 i4 i5 i6"
+Set initial wheel positions based on the following six arguments,
+which must each be a single alphabetic character.
+.
+.TP
+.BI \-l " KeyListIndicator"
+Use the specified key list indicator, which must be a
+two-character alphabetic string.
+.
+.TP
+.B \-p
+Print key setting to stdout.
+.
+The resulting output may be redirected to a file, and is suitable for
+loading into
+.B m209
+using either the
+.B \-a
+or
+.B \-k
+options. A key list indicator and/or net indicator will be included
+in the output if specified with the
+.B \-l
+and/or
+.B \-n
+options.
+.
+.TP
+.BI \-t " KeyDir"
+Specify the directory in which to search for key files when using the
+.B \-a
+option.
+.
+Defaults to current directory.
+.
+.TP
+.BI \-s " n"
+Skip
+.I n
+leading characters in input stream. Useful to skip message indicators
+in formats which are not supported by the
+.B \-a
+option.
+.
+.TP
+.B \-v
+Print verbose debugging messages to stderr.
+.
+.TP
+.B \-q
+Suppress information messages which are normally printed to stderr.
+.
+.TP
+.B \-\-version | \-V
+Print program version and copyright information to stderr, then exit.
+.
+.TP
+.B \-\-help | \-h
+Print program version, copyright and usage instructions to stderr,
+then exit.
+.
+.SH FILES
+.
+.PP
+Key setting files generated by
+.B m209
+using the
+.B \-p
+option are ordinary human-readable plain ASCII text files.
+.B m209
+can tolerate minor formatting variations in key files when it
+reads them. It also ignores any lines which do not appear
+to match expected patterns for normal key file lines, so it is
+possible to include semi-arbitrary text in key files. Expected
+lines are required to be in all upper case, so using mixed case
+in arbitrary text lines guarantees that they will be ignored.
+.
+.PP
+Here is a sample key table, in the format that
+.B m209
+expects:
+.
+.IP
+.ft C
+.ps -2
+KEY LIST INDICATOR: FM
+.br
+-------------------------------
+.br
+NR LUGS  1  2  3  4  5  6
+.br
+-------------------------------
+.br
+01 1-0   -  A  A  -  -  A
+.br
+02 2-0   B  -  -  -  -  -
+.br
+03 2-0   C  C  -  -  C  C
+.br
+04 2-0   -  D  -  D  -  D
+.br
+05 2-0   E  -  E  -  E  -
+.br
+06 2-0   -  -  -  F  -  F
+.br
+07 2-0   -  -  -  G  -  -
+.br
+08 2-0   -  H  H  -  H  H
+.br
+09 2-0   -  -  -  I  I  I
+.br
+10 0-3   J  J  J  -  J  -
+.br
+11 0-3   -  -  -  -  -  -
+.br
+12 0-3   -  L  L  L  L  -
+.br
+13 0-3   -  M  -  M  -  M
+.br
+14 0-3   -  N  -  N  N  N
+.br
+15 0-3   O  O  O  -  -  -
+.br
+16 0-3   P  -  -  P  P  -
+.br
+17 0-4   -  Q  Q  Q  -  -
+.br
+18 0-4   -  R  R  -  -   
+.br
+19 0-4   S  -  -  S  S   
+.br
+20 0-4   T  -  -  -      
+.br
+21 0-4   U  U  U  -      
+.br
+22 0-5   V  -  V         
+.br
+23 0-5   -  -  -         
+.br
+24 1-5   X  Y            
+.br
+25 1-6   Y  Z            
+.br
+26 3-4   -               
+.br
+27 4-5                   
+.br
+-------------------------------
+.br
+26 LETTER CHECK
+.br
+.br
+TNMYS CRMKK UHLKW LDQHM RQOLW R
+.br
+-------------------------------
+.ps
+.ft
+.
+.SH EXAMPLES
+.
+.PP
+m209 -g -l AB -p >AB.txt
+.PP
+m209 -a -c -l AB <plain.txt >cipher.txt
+.PP
+m209 -a -d <cipher.txt >deciphered.txt
+.PP
+m209 -c -k AB.txt -i a b c d e f <plain.txt >cipher.txt
+.
+.SH UPDATES
+.
+.PP
+The hagelin project is hosted at GitLab:
+.br
+https://gitlab.com/NF6X_Crypto/hagelin
+.
+.SH SEE ALSO
+.
+http://www.nf6x.net/tag/hagelin
+.br
+http://en.wikipedia.org/wiki/M-209
+.
+.SH COPYRIGHT
+.
+.PP
+Copyright (C) 2009-2013 Mark J. Blair
+.PP
+m209 is part of the Hagelin project.
+.PP
+Hagelin is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+.PP
+Hagelin is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+.
+See the GNU General Public License for more details.
+.PP
+You should have received a copy of the GNU General Public License
+along with Hagelin.
+.
+If not, see <http://www.gnu.org/licenses/>.
+.
+.SH AUTHOR
+.
+.PP
+Mark J. Blair, NF6X <nf6x@nf6x.net>
+.br
+http://www.nf6x.net
+.

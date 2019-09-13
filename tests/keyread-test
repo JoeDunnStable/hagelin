@@ -1,0 +1,6 @@
+#!/bin/sh
+#
+
+rm -f keyread-test.out
+./m209/m209 -q -k ${srcdir}/tests/mangled.m209key -p > keyread-test.out
+diff -q ${srcdir}/tests/MB.m209key keyread-test.out

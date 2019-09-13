@@ -1,0 +1,51 @@
+This mangled key file is used to test the key file reading routine's tolerance
+for formatting variations. It should be functionally identical to MB.m209key
+
+-------------------------------
+26 LETTER CHECK
+
+TUBZZ  MZNPM      OSPMW GZEMPQPNTM Q
+-------------------------------
+
+random text
+Thequ ickbr owndo gjump edove r
+the lazy fox.
+01 0-5   A  -  -  -  A  A
+02 06   B  B  -  B  B  -
+03 0  4   -  -  -  C  -  -
+04:   0-3   -  D  -  D  D  D
+5 05 EEE---
+06 0 -  6                F  F  -  -  F  F
+  07 0-5   -  G  -	G  G  -
+08 0-6   H  -  H  H  -  H
+ 	    10 5-6   -  -  J  -  -  		  J           	
+09 5-6   -  I  -  I  I  -
+11 0-5   K  K  K  -  -  -
+12 0-5   L  -  -  L  L  L
+   M-209 KEY LIST: MB
+13 0-1   -  -  M  M  M  -
+16 0-5   P  -  -  -  P  P
+17 0-5   -  Q  -  Q  -  Q
+18 1-6   -  -  R  -  R   
+  NET INDICATOR:TeST
+19 0-5   -  -  S  -  -   
+20 0-6   T  T  T  -      
+21 0-6   -  U  U  U      
+22 0-6   V  -  -         
+23 0-5   W  -  -         
+24 0-2   -  -            
+14: 1-4 -N----
+15 0-5   -  O  O  -  -  O
+25 2-4   -  -            
+26 5-6   Z               
+27 0-1                   
+-------------------------------
+NR LUGS  1  2  3  4  5  6
+-------------------------------
+>11001101001100010001011001
+>0101111010100110100110000
+>00001001011010100111100
+>011100111001100010001
+>1101011010011001010
+>10010101010100111
+>05 06 04 03 05 06 05 06 56 56 05 05 01 14 05 05 05 16 05 06 06 06 05 02 24 56 01 

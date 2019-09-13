@@ -1,0 +1,70 @@
+.\" **************************************************************************
+.\"  Copyright (C) 2009-2013 Mark J. Blair, NF6X
+.\"
+.\"  This file is part of Hagelin
+.\"
+.\"   Hagelin is free software: you can redistribute it and/or modify
+.\"   it under the terms of the GNU General Public License as published by
+.\"   the Free Software Foundation, either version 3 of the License, or
+.\"   (at your option) any later version.
+.\"
+.\"   Hagelin is distributed in the hope that it will be useful,
+.\"   but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"   GNU General Public License for more details.
+.\"
+.\"   You should have received a copy of the GNU General Public License
+.\"   along with Hagelin.  If not, see <http://www.gnu.org/licenses/>.
+.\" **************************************************************************
+.TH hagelin 1 "" "Version !VERSION!" "USER COMMANDS"
+.
+.SH NAME
+hagelin \- suite of simulators for Hagelin cipher machines
+.
+.SH DESCRIPTION
+The
+.B hagelin
+package is a suite of simulators for cipher machines based on the
+designs of Boris Hagelin.
+.SH UPDATES
+.
+.PP
+The hagelin project is hosted at GitLab:
+.br
+https://gitlab.com/NF6X_Crypto/hagelin
+.
+.SH SEE ALSO
+.
+m209(1)
+.br
+http://www.nf6x.net/tag/hagelin
+.br
+http://en.wikipedia.org/wiki/M-209
+.SH COPYRIGHT
+.
+.PP
+Copyright (C) 2009-2013 Mark J. Blair
+.PP
+Hagelin is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+.PP
+Hagelin is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+.
+See the GNU General Public License for more details.
+.PP
+You should have received a copy of the GNU General Public License
+along with Hagelin.
+.
+If not, see <http://www.gnu.org/licenses/>.
+.
+.SH AUTHOR
+.
+.PP
+Mark J. Blair, NF6X <nf6x@nf6x.net>
+.br
+http://www.nf6x.net
+.

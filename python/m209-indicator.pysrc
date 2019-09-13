@@ -1,0 +1,139 @@
+#!/usr/bin/env python
+#
+##########################################################################
+# Copyright (C) 2009-2013 Mark J. Blair, NF6X
+#
+# This file is part of Hagelin.
+#
+#  Hagelin is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  Hagelin is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with Hagelin.  If not, see <http://www.gnu.org/licenses/>.
+##########################################################################
+
+"""Output current key list indicator for specified net indicator.
+
+    This utility script outputs the two-letter key list indicator
+    corresponding to today's date (in GMT time zone) for the
+    specified net indicator.
+
+    Usage:
+        m209-indicator.py <NetIndicator>
+
+    Example:
+        m209-indicator.py MYNET
+
+
+    m209-indicator.py is part of the hagelin package, available
+    at https://gitlab.com/NF6X_Crypto/hagelin
+
+    Copyright (C) 2013 Mark J. Blair <nf6x@nf6x.net>
+    Released under GPLv3."""
+
+from __future__ import print_function
+import sys
+import time
+import datetime
+import getopt
+
+
+def version():
+    """Print version number to stderr."""
+    print("M-209 Key List Indicator Utility", file=sys.stderr)
+    print("Version @VERSION@", file=sys.stderr)
+    print("Copyright (C) 2013 Mark J. Blair <nf6x@nf6x.net>", file=sys.stderr)
+    print("Released under GPLv3", file=sys.stderr)
+
+
+def usage():
+    """Print version number and usage information to stderr."""
+    print("", file=sys.stderr)
+    version()
+    print("", file=sys.stderr)
+    print("Usage:", file=sys.stderr)
+    print("    m209-indicator.py [options] <NetIndicator>", file=sys.stderr)
+    print("", file=sys.stderr)
+    print("Options:", file=sys.stderr)
+    print("    -h | --help", file=sys.stderr)
+    print("        Print version and usage information to stderr and exit.", file=sys.stderr)
+    print("", file=sys.stderr)
+    print("    -v | --version", file=sys.stderr)
+    print("        Print version information to stderr and exit.", file=sys.stderr)
+    print("", file=sys.stderr)
+    print("Example:", file=sys.stderr)
+    print("    m209-indicator.py MYNET", file=sys.stderr)
+    exit(1)
+
+
+def indicator(NetIndicator, Year, Month, Day):
+    """Return key list indicator for specified date.
+
+    Key list indicator is 2-letter string from AA through ZZ.
+    Indicator increments each day following pattern
+    AA, AB, AC, ... AZ, BA, BB, ... ZY, ZZ, AA, ...
+
+    Key list indicators are calculated from the proleptic
+    Gregorian ordinal day (i.e., days since JAN 1 of year 1),
+    plus ASCII value of each character of NetIndicator
+    (so that different nets tend to use different key list
+    indicators on a particular date), modulo 26^2."""
+
+    # Don't try to find deep meaning in this calculation.
+    # It is pretty arbitrary.
+    IndicatorNum = datetime.date(Year, Month, Day).toordinal()
+    for c in NetIndicator:
+        IndicatorNum = IndicatorNum + ord(c)
+    IndicatorNum = IndicatorNum % 676
+    Indicator = chr((IndicatorNum//26) + ord('A')) \
+        + chr((IndicatorNum%26) + ord('A'))
+    return Indicator
+
+
+    
+##########################################################################
+
+if __name__ == "__main__":
+    """Main entry point."""
+
+    # Parse arguments
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hv",
+                                   ["help", "version"])
+    except getopt.GetoptError as err:
+        print(str(err), file=sys.stderr)
+        usage()
+        exit(1)
+    
+    for opt, arg in opts:
+        if opt in ("-h", "--help"):
+            usage()
+            exit(0)
+
+        elif opt in ("-v", "--version"):
+            version()
+            exit(0)
+
+
+    if len(args) != 1:
+        print("ERROR: Wrong number of arguments.", file=sys.stderr)
+        usage()
+        exit(1)
+
+    NetIndicator = args[0].upper()
+
+    Now   = time.gmtime()
+    Year  = Now.tm_year
+    Month = Now.tm_mon
+    Day   = Now.tm_mday
+
+    print(indicator(NetIndicator, Year, Month, Day))
+    
+    exit(0)
