@@ -1,4 +1,5 @@
 /**************************************************************************
+ * Copyright (C) 2019 Joseph dunn
  * Copyright (C) 2009-2013 Mark J. Blair, NF6X
  *
  * This file is part of Hagelin.
@@ -18,8 +19,9 @@
  **************************************************************************/
 
 /*!
- * \file
+ * \file keywheel.h
  * \brief Definition of the Keywheel class.
+ * \package hagelin
  */
 
 #ifndef _KEYWHEEL_H_
@@ -92,7 +94,7 @@ public:
 
     //! Add position to wheel with specified name (name must be unique).
     //
-    void AddPosition(const char *name);
+    void AddPosition(const string& name);
 
 
     //! Set read offset.
@@ -107,7 +109,7 @@ public:
 
     //! Set wheel to specific position, by name.
     //
-    void SetPosByName(const char *name);
+    void SetPosByName(const string& name);
 
 
     //! Rotate wheel by specified number of positions.

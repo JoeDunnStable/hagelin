@@ -1,4 +1,5 @@
 /**************************************************************************
+ * Copyright (C) 2019 Joseph Dunn
  * Copyright (C) 2009-2013 Mark J. Blair, NF6X
  *
  * This file is part of Hagelin.
@@ -18,12 +19,19 @@
  **************************************************************************/
 
 /*!
- * \file
+ * \file M209GenKey.cc
  * \brief M209 class GenKey() function
+ * \package hagelin
  */
 
-
-#include "hagelin.h"
+#include <iostream>
+using std::cerr;
+#include <iomanip>
+using std::setw;
+using std::setfill;
+using std::dec;
+#include "config.h"
+#include "M209.h"
 
 //! Random number function for use with shuffle algorithm.
 //

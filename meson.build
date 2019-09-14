@@ -1,20 +1,9 @@
 project('Hagelin', 'cpp', default_options : ['cpp_std=c++11'],
-         version : '2018-06-06a')
+        version : '2019-09-14', license : 'GPL v3')
 
 compiler=meson.get_compiler('cpp').get_id()
 
-if compiler == 'gcc' or compiler == 'clang'
-  add_global_arguments(
-      [ '-fvisibility=hidden' ,
-	       '-Wno-non-virtual-dtor' ,
-	       '-Wno-sign-compare' ,
-	       '-Wno-uninitialized',
-               '-Wno-return-type' ,
-               '-Wno-parentheses' ,
-               '-Wno-attributes'
-      ] ,
-      language : 'cpp' )
-elif compiler == 'msvc'
+if compiler == 'msvc'
   add_global_arguments(
       ['/bigobj',
        '/wd4146',
@@ -29,7 +18,7 @@ elif compiler == 'msvc'
 endif
 
 #Boost header and some libraries.
-boostdep = dependency('boost', modules : ['regex'],  required : true)
+boostdep = dependency('boost', modules : ['regex', 'program_options'],  required : true)
 
 hagelin_config = configuration_data()
 hagelin_config.set('PACKAGE_NAME', meson.project_name())

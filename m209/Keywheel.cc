@@ -1,4 +1,5 @@
 /**************************************************************************
+ * Copyright (C) 2019 Joseph Dunn
  * Copyright (C) 2009-2013 Mark J. Blair, NF6X
  *
  * This file is part of Hagelin.
@@ -18,8 +19,9 @@
  **************************************************************************/
 
 /*!
- * \file
+ * \file Keywheel.h
  * \brief Implementation of Keywheel class member functions.
+ * \package hagelin
  */
 
 #include <iostream>
@@ -41,7 +43,7 @@ Keywheel::Keywheel() {
 }
 
 
-void Keywheel::AddPosition(const char *name) {
+void Keywheel::AddPosition(const string& name) {
   if (PosByName.count(name)) {
     throw std::invalid_argument(
                                 "Keywheel::AddPosition(): duplicate name");
@@ -67,7 +69,7 @@ void Keywheel::SetPosition(int pos) {
 }
 
 
-void Keywheel::SetPosByName(const char *name) {
+void Keywheel::SetPosByName(const string& name) {
   if (PosByName.count(name) != 1) {
     throw std::invalid_argument(
                                 "Keywheel::SetPosByName(): name not found");

@@ -1,4 +1,5 @@
 /**************************************************************************
+ * Copyright (C) 2019 Jospeh Dunn
  * Copyright (C) 2009-2013 Mark J. Blair, NF6X
  *
  * This file is part of Hagelin.
@@ -18,8 +19,9 @@
  **************************************************************************/
 
 /*!
- * \file
+ * \file M209.cc
  * \brief Implementation of M209 class member functions.
+ * \package hagelin
  */
 
 #include <iostream>
@@ -258,14 +260,14 @@ void M209::PrintKey(string KeyListIndicator, string NetIndicator) {
 }
 
 
-void M209::LoadKey(const char *fname) {
+void M209::LoadKey(const string& fname) {
   string    dummy1;
   string    dummy2;
   
   this->LoadKey(fname, dummy1, dummy2);
 }
 
-void M209::LoadKey(const char *fname, string& KeyListIndicator, string &NetIndicator) {
+void M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetIndicator) {
   ifstream            keyfile(fname, ifstream::in); // key file input stream
   string              line;                         // single line read from key file
   boost::regex  netind_regex;          // regex matching net indicator line
@@ -567,7 +569,7 @@ void M209::ResetCounter(void) {
 }
 
 
-bool M209::SetWheels(vector<string *> indicator) {
+bool M209::SetWheels(vector<string> indicator) {
   int    i, j;
   
   
@@ -577,10 +579,10 @@ bool M209::SetWheels(vector<string *> indicator) {
         cerr << "Trying wheel "
         << dec << i
         << " setting "
-        << indicator[j]->c_str()
+        << indicator[j]
         << endl;
       }
-      Wheels[i].SetPosByName(indicator[j]->c_str());
+      Wheels[i].SetPosByName(indicator[j]);
     } catch (...) {
       // reset counters to force retry with next indicator value
       --i;
@@ -617,8 +619,8 @@ void M209::CipherStream(bool AutoIndicator,
   int      tries;
   char    MsgIndLtr='A';  // Letter enciphered to get IntMsgInd
   char    InC, OutC;  // Input and Output characters
-  vector<string *>  ExtMsgInd;  // External Message Indicator
-  vector<string *>  IntMsgInd;  // Internal Message Indicator
+  vector<string>  ExtMsgInd;  // External Message Indicator
+  vector<string>  IntMsgInd;  // Internal Message Indicator
   list<char>    MsgText;  // Text of input message
   vector<char>  MsgInd1, MsgInd2;
   string    MyKLI;    // Key list indicator
@@ -638,12 +640,18 @@ void M209::CipherStream(bool AutoIndicator,
   // Prepare message indicator vectors
   MsgInd1.resize(10);
   MsgInd2.resize(10);
+  /*
   for (i=0; i<6; i++) {
     ExtMsgInd.push_back(new string());
   }
+   */
+  ExtMsgInd.resize(6);
+  IntMsgInd.resize(12);
+  /*
   for (i=0; i<12; i++) {
     IntMsgInd.push_back(new string());
-  }
+  )
+   */
   
   // regexp matching net indicator and group count in ciphertext.
   // Tolerate some variation in the "GR" text.
@@ -771,7 +779,7 @@ void M209::CipherStream(bool AutoIndicator,
           ui_dist dist(0,Wheels[i].GetWheelSize()-1);
           r = dist(gen);
           Wheels[i].SetPosition(r);
-          ExtMsgInd[i]->assign(Wheels[i].GetPosName());
+          ExtMsgInd[i]=Wheels[i].GetPosName();
         }
         
         // Pick a random letter to be enciphered to produce external
@@ -781,7 +789,7 @@ void M209::CipherStream(bool AutoIndicator,
         
         // Encipher letter 12 times to get internal message indicator
         for (i=0; i<(int)IntMsgInd.size(); i++) {
-          IntMsgInd[i]->assign(1, Cipher(MsgIndLtr));
+          IntMsgInd[i]=Cipher(MsgIndLtr);
         }
         
         if (Verbose) {
@@ -789,11 +797,11 @@ void M209::CipherStream(bool AutoIndicator,
           << dec << tries
           << " EMI=";
           for (i=0; i<(int)ExtMsgInd.size(); i++) {
-            cerr << ExtMsgInd[i]->c_str();
+            cerr << ExtMsgInd[i];
           }
           cerr << " letter=" << MsgIndLtr << " IMI=";
           for (i=0; i<(int)IntMsgInd.size(); i++) {
-            cerr << IntMsgInd[i]->c_str();
+            cerr << IntMsgInd[i];
           }
           cerr << endl;
         }
@@ -814,7 +822,7 @@ void M209::CipherStream(bool AutoIndicator,
       // and key list indicator
       OutBuf << MsgIndLtr << MsgIndLtr;
       for (i=0; i<(int)ExtMsgInd.size(); i++) {
-        OutBuf << ExtMsgInd[i]->c_str();
+        OutBuf << ExtMsgInd[i];
         if (((i+3) % 5) == 0) {
           OutBuf << ' ';
         }
@@ -868,7 +876,7 @@ void M209::CipherStream(bool AutoIndicator,
       // Extract message indicator components
       MsgIndLtr = MsgInd1[0];
       for (i=0; i<(int)ExtMsgInd.size(); i++) {
-        ExtMsgInd[i]->assign(1, MsgInd1[i+2]);
+        ExtMsgInd[i]=MsgInd1[i+2];
       }
       MyKLI.clear();
       i += 2;
@@ -922,7 +930,7 @@ void M209::CipherStream(bool AutoIndicator,
         exit(1);
       }
       for (i=0; i<(int)IntMsgInd.size(); i++) {
-        IntMsgInd[i]->assign(1, Cipher(MsgIndLtr));
+        IntMsgInd[i]=Cipher(MsgIndLtr);
       }
       
       // Reset letter counter and attempt to set wheels
@@ -987,7 +995,7 @@ void M209::CipherStream(bool AutoIndicator,
     // and key list indicator
     OutBuf << MsgIndLtr << MsgIndLtr;
     for (i=0; i<(int)ExtMsgInd.size(); i++) {
-      OutBuf << ExtMsgInd[i]->c_str();
+      OutBuf << ExtMsgInd[i];
       
       // Add a space or line break every five letters
       if (((i+3) % 5) == 0) {

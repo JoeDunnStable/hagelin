@@ -26,6 +26,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6F43FCD8232D57B20098362F /* m209.mansrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = m209.mansrc; sourceTree = "<group>"; };
+		6F43FCD9232D57B20098362F /* hagelin.mansrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hagelin.mansrc; sourceTree = "<group>"; };
+		6F43FCDA232D57B20098362F /* Doxyfile.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Doxyfile.in; sourceTree = "<group>"; };
+		6F43FCDB232D57D20098362F /* meson.build */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = meson.build; sourceTree = "<group>"; };
+		6F43FCDD232D7F680098362F /* m209-indicator.pysrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "m209-indicator.pysrc"; sourceTree = "<group>"; };
+		6F43FCDE232D7F680098362F /* m209-keylist.pysrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "m209-keylist.pysrc"; sourceTree = "<group>"; };
+		6F43FCDF232D7F680098362F /* meson.build */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = meson.build; sourceTree = "<group>"; };
 		6F69CFD82329FDB300696078 /* m209 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = m209; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F69CFE2232A00F300696078 /* m209_main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = m209_main.cc; sourceTree = "<group>"; };
 		6F69CFE3232A00F300696078 /* M209GenKey.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = M209GenKey.cc; sourceTree = "<group>"; };
@@ -39,6 +46,8 @@
 		6F69CFF1232C2B1C00696078 /* keyread-test */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "keyread-test"; sourceTree = "<group>"; };
 		6F69CFF2232C2B1D00696078 /* meson.build */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = meson.build; sourceTree = "<group>"; };
 		6F69CFF3232C2B1D00696078 /* cipher-test */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "cipher-test"; sourceTree = "<group>"; };
+		6FF4BC6D232CA1BD0090B8F5 /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
+		6FF4BC6E232CB6490090B8F5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,12 +61,37 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6F43FCD7232D572B0098362F /* doc */ = {
+			isa = PBXGroup;
+			children = (
+				6F43FCDB232D57D20098362F /* meson.build */,
+				6F43FCDA232D57B20098362F /* Doxyfile.in */,
+				6F43FCD9232D57B20098362F /* hagelin.mansrc */,
+				6F43FCD8232D57B20098362F /* m209.mansrc */,
+			);
+			path = doc;
+			sourceTree = "<group>";
+		};
+		6F43FCDC232D7F210098362F /* python */ = {
+			isa = PBXGroup;
+			children = (
+				6F43FCDD232D7F680098362F /* m209-indicator.pysrc */,
+				6F43FCDE232D7F680098362F /* m209-keylist.pysrc */,
+				6F43FCDF232D7F680098362F /* meson.build */,
+			);
+			path = python;
+			sourceTree = "<group>";
+		};
 		6F69CFCF2329FDB300696078 = {
 			isa = PBXGroup;
 			children = (
+				6FF4BC6E232CB6490090B8F5 /* README.md */,
+				6FF4BC6D232CA1BD0090B8F5 /* LICENSE.md */,
 				6F69CFEE232C2A1300696078 /* meson.build */,
 				6F69CFED232B374100696078 /* config.h.in */,
+				6F43FCD7232D572B0098362F /* doc */,
 				6F69CFDA2329FDB300696078 /* m209 */,
+				6F43FCDC232D7F210098362F /* python */,
 				6F69CFF0232C2A8700696078 /* tests */,
 				6F69CFD92329FDB300696078 /* Products */,
 			);
@@ -282,7 +316,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				OTHER_LDFLAGS = "-lboost_regex-mt";
+				OTHER_LDFLAGS = (
+					"-lboost_regex-mt",
+					"-lboost_program_options-mt",
+					"-lboost_system-mt",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -291,7 +329,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				OTHER_LDFLAGS = "-lboost_regex-mt";
+				OTHER_LDFLAGS = (
+					"-lboost_regex-mt",
+					"-lboost_program_options-mt",
+					"-lboost_system-mt",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

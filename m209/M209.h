@@ -1,4 +1,5 @@
 /**************************************************************************
+ * Copyright (C) 2019 Joseph Dunn
  * Copyright (C) 2009-2013 Mark J. Blair, NF6X
  *
  * This file is part of Hagelin.
@@ -18,8 +19,9 @@
  **************************************************************************/
 
 /*!
- * \file
+ * \file M209.h
  * \brief Definition of the M209 class.
+ * \package hagelin
  */
 
 #ifndef _M209_H_
@@ -99,8 +101,8 @@ public:
 
     //! Load key from file.
     //
-    void LoadKey(const char *fname);
-    void LoadKey(const char *fname, string& KeyListIndicator, string& NetIndicator);
+    void LoadKey(const string& fname);
+    void LoadKey(const string& fname, string& KeyListIndicator, string& NetIndicator);
 
 
     //! Generate a random key.
@@ -119,7 +121,7 @@ public:
     //! six are provided, unusable indicators will be discarded.
     //! Returns true if successful, false if not.
     //
-    bool SetWheels(vector<string *> indicator);
+    bool SetWheels(vector<string> indicator);
 
 
     //! Encipher/Decipher a stream, exit() on EOF.
