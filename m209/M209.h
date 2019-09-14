@@ -27,6 +27,8 @@
 #ifndef _M209_H_
 #define _M209_H_
 
+#include <bitset>
+using std::bitset;
 #include "Keywheel.h"
 
 
