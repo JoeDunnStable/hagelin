@@ -30,6 +30,9 @@ using std::cerr;
 using std::setw;
 using std::setfill;
 using std::dec;
+#include <algorithm>
+using std::sort;
+using std::random_shuffle;
 #include "config.h"
 #include "M209.h"
 

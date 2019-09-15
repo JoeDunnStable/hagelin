@@ -33,7 +33,7 @@ using std::setfill;
 #include <fstream>
 using std::ifstream;
 
-#include <boost/regex.hpp>
+#include <regex>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -279,11 +279,11 @@ bool M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetInd
   }
 
   string              line;                         // single line read from key file
-  boost::regex  netind_regex;          // regex matching net indicator line
-  boost::regex  keyind_regex;          // regex matching key list indicator line
-  boost::regex        key_regex;                    // regex matching pin/lug setting line
-  boost::regex        check_regex;                  // regex matching 26 letter check
-  boost::smatch       matches;                      // matches returned by regex_match
+  std::regex  netind_regex;          // regex matching net indicator line
+  std::regex  keyind_regex;          // regex matching key list indicator line
+  std::regex        key_regex;                    // regex matching pin/lug setting line
+  std::regex        check_regex;                  // regex matching 26 letter check
+  std::smatch       matches;                      // matches returned by regex_match
   bool    found_check;          // found 26 letter check?
   string    check_line;          // reformatted 26 letter check line
   bool    found_lugbar[NUM_LUG_BARS];   // found pin/lug line?
@@ -338,7 +338,7 @@ bool M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetInd
   // Read key file one line at a time
   while (getline(keyfile, line)) {
     
-    if (boost::regex_match(line, matches, key_regex)) {
+    if (std::regex_match(line, matches, key_regex)) {
       // Found a pin/lug setting line
       
       if (Verbose) {
@@ -352,7 +352,7 @@ bool M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetInd
       }
       
       // decode lugbar number
-      int lugbar_num = boost::lexical_cast<int>(matches[1]) - 1;
+      int lugbar_num = boost::lexical_cast<int>(matches[1].str()) - 1;
       if (Verbose) {
         cerr << "  lugbar " << (lugbar_num + 1);
       }
@@ -369,8 +369,8 @@ bool M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetInd
       found_lugbar[lugbar_num] = true;
       
       // decode and sanity-check lug settings
-      int lug1 = boost::lexical_cast<int>(matches[2]);
-      int lug2 = boost::lexical_cast<int>(matches[3]);
+      int lug1 = boost::lexical_cast<int>(matches[2].str());
+      int lug2 = boost::lexical_cast<int>(matches[3].str());
       if (Verbose) {
         cerr << "  lugs " << lug1 << " " << lug2;
       }
@@ -392,7 +392,7 @@ bool M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetInd
       }
       
       // strip spaces from pin settings
-      string pins = matches[4];
+      string pins = matches[4].str();
       for (int n = 0; n < pins.length(); ) {
         if (isspace(pins[n])) {
           pins.erase(n,1);
@@ -469,7 +469,7 @@ bool M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetInd
       }
       
       
-    } else if (boost::regex_match(line, matches, check_regex)) {
+    } else if (std::regex_match(line, matches, check_regex)) {
       // Found the 26 letter check line
       
       if (Verbose) {
@@ -498,25 +498,25 @@ bool M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetInd
       // Reassemble check line without group spacing
       check_line = "";
       for (int n = 1; n < 7; n++) {
-        check_line = check_line + matches[n];
+        check_line = check_line + matches[n].str();
       }
       
-    } else if (boost::regex_match(line, matches, netind_regex)) {
+    } else if (std::regex_match(line, matches, netind_regex)) {
       // Found a net indicator
       if (Verbose) {
         cerr << "  net indicator line \"" << line << "\"" << endl;
       }
       
-      NetIndicator.assign(matches[1]);
+      NetIndicator.assign(matches[1].str());
       boost::to_upper(NetIndicator);
       
-    } else if (boost::regex_match(line, matches, keyind_regex)) {
+    } else if (std::regex_match(line, matches, keyind_regex)) {
       // Found a key list indicator
       if (Verbose) {
         cerr << "  key list indicator line \"" << line << "\"" << endl;
       }
       
-      KeyListIndicator.assign(matches[3]);
+      KeyListIndicator.assign(matches[3].str());
       
       
     } else {
@@ -636,8 +636,8 @@ void M209::CipherStream(bool AutoIndicator,
   string    MyKLI;    // Key list indicator
   stringstream  OutBuf;    // Output buffer
   string    line;    // Line buffer for input stream
-  boost::regex  netind_regex;  // regex matching net indicator line of message
-  boost::smatch       matches;        // matches returned by regex_match
+  std::regex  netind_regex;  // regex matching net indicator line of message
+  std::smatch       matches;        // matches returned by regex_match
   bool    FoundNetInd = false;
   
   
@@ -690,7 +690,7 @@ void M209::CipherStream(bool AutoIndicator,
     // a net indicator line. Only discard the first such
     // line found.
     if (!CipherMode && !FoundNetInd) {
-      if (boost::regex_match(line, matches, netind_regex)) {
+      if (std::regex_match(line, matches, netind_regex)) {
         // Line looks like a net indicator line. Discard it.
         if (Verbose) {
           cerr << "discarding net indicator line \"" << line << "\"" << endl;
