@@ -103,8 +103,8 @@ public:
 
     //! Load key from file.
     //
-    void LoadKey(const string& fname);
-    void LoadKey(const string& fname, string& KeyListIndicator, string& NetIndicator);
+    bool LoadKey(const string& fname);
+    bool LoadKey(const string& fname, string& KeyListIndicator, string& NetIndicator);
 
 
     //! Generate a random key.

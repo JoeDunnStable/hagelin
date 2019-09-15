@@ -260,15 +260,24 @@ void M209::PrintKey(string KeyListIndicator, string NetIndicator) {
 }
 
 
-void M209::LoadKey(const string& fname) {
+bool M209::LoadKey(const string& fname) {
   string    dummy1;
   string    dummy2;
   
-  this->LoadKey(fname, dummy1, dummy2);
+  return LoadKey(fname, dummy1, dummy2);
 }
 
-void M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetIndicator) {
-  ifstream            keyfile(fname, ifstream::in); // key file input stream
+bool M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetIndicator) {
+
+  if (Verbose) {
+    cerr << "Looking for key file " << fname << endl;
+  }
+  ifstream keyfile(fname, ifstream::in); // key file input stream
+  if (!keyfile) return false;
+  if (!Quiet) {
+    cerr << "Loading key file " << fname << endl;
+  }
+
   string              line;                         // single line read from key file
   boost::regex  netind_regex;          // regex matching net indicator line
   boost::regex  keyind_regex;          // regex matching key list indicator line
@@ -555,6 +564,7 @@ void M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetInd
     Wheels[n].SetPosition(0);
   }
   keyfile.close();
+  return true;
 }
 
 
@@ -624,7 +634,6 @@ void M209::CipherStream(bool AutoIndicator,
   list<char>    MsgText;  // Text of input message
   vector<char>  MsgInd1, MsgInd2;
   string    MyKLI;    // Key list indicator
-  string    Keyfile;  // Key file name
   stringstream  OutBuf;    // Output buffer
   string    line;    // Line buffer for input stream
   boost::regex  netind_regex;  // regex matching net indicator line of message
@@ -724,41 +733,14 @@ void M209::CipherStream(bool AutoIndicator,
       if (KeyListIndicator.length() == 2) {
         MyKLI = KeyListIndicator;
         
-        Keyfile = KeyDir;
-        Keyfile.append("/");
-        Keyfile.append(MyKLI);
-        Keyfile.append(KEYFILE_SUFFIX1);
-        
-        if (Verbose) {
-          cerr << "Looking for key file " << Keyfile << endl;
-        }
-        
-        if (access(Keyfile.c_str(), R_OK) == 0) {
-          if (!Quiet) {
-            cerr << "Loading key file " << Keyfile << endl;
-          }
-          LoadKey(Keyfile.c_str(), KeyListIndicator, NetIndicator);
-        } else {
-          MyKLI = KeyListIndicator;
-          
-          Keyfile = KeyDir;
-          Keyfile.append("/");
-          Keyfile.append(MyKLI);
-          Keyfile.append(KEYFILE_SUFFIX2);
-          
-          if (Verbose) {
-            cerr << "Looking for key file " << Keyfile << endl;
-          }
-          
-          if (access(Keyfile.c_str(), R_OK) == 0) {
-            if (!Quiet) {
-              cerr << "Loading key file " << Keyfile << endl;
-            }
-            LoadKey(Keyfile.c_str(), KeyListIndicator, NetIndicator);
-          } else if (!Quiet) {
-            cerr << "Key file not found; using current key settings."
-            << endl;
-          }
+        string Keyfile1 = KeyDir + "/" + MyKLI + KEYFILE_SUFFIX1;
+        string Keyfile2 = KeyDir + "/" + MyKLI + KEYFILE_SUFFIX2;
+
+        if (LoadKey(Keyfile1, KeyListIndicator, NetIndicator)) {
+        } else if (LoadKey(Keyfile2, KeyListIndicator, NetIndicator)) {
+        } else if (!Quiet) {
+          cerr << "Key file not found; using current key settings."
+          << endl;
         }
       }
       
@@ -886,41 +868,15 @@ void M209::CipherStream(bool AutoIndicator,
       
       // See if corresponding key file exists
       // Try .txt extension first, then .m209key if not found.
-      Keyfile = KeyDir;
-      Keyfile.append("/");
-      Keyfile.append(MyKLI);
-      Keyfile.append(KEYFILE_SUFFIX1);
-      
-      if (Verbose) {
-        cerr << "Looking for key file " << Keyfile << endl;
+      string Keyfile1 = KeyDir + "/" + MyKLI + KEYFILE_SUFFIX1;
+      string Keyfile2 = KeyDir + "/" + MyKLI + KEYFILE_SUFFIX2;
+
+      if (LoadKey(Keyfile1)) {
+      } else if (LoadKey(Keyfile2)) {
+      } else  if (!Quiet) {
+        cerr << "Key file not found; using current key settings."
+        << endl;
       }
-      
-      if (access(Keyfile.c_str(), R_OK) == 0) {
-        if (!Quiet) {
-          cerr << "Loading key file " << Keyfile << endl;
-        }
-        LoadKey(Keyfile.c_str());
-      } else {
-        Keyfile = KeyDir;
-        Keyfile.append("/");
-        Keyfile.append(MyKLI);
-        Keyfile.append(KEYFILE_SUFFIX2);
-        
-        if (Verbose) {
-          cerr << "Looking for key file " << Keyfile << endl;
-        }
-        
-        if (access(Keyfile.c_str(), R_OK) == 0) {
-          if (!Quiet) {
-            cerr << "Loading key file " << Keyfile << endl;
-          }
-          LoadKey(Keyfile.c_str());
-        } else  if (!Quiet) {
-          cerr << "Key file not found; using current key settings."
-          << endl;
-        }
-      }
-      
       
       // Generate internal message indicator
       LetterCounter = 0;
