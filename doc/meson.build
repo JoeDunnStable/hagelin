@@ -3,7 +3,7 @@ doxygen = find_program('doxygen')
 if(doxygen.found())
   src_doxygen = [meson.source_root()+'/README.md', \
                  meson.source_root()+'/m209/m209_main.cc', \
-		 meson.source_root()+'/m209/m209.h', \
+		 meson.source_root()+'/m209/M209.h', \
 		 meson.source_root()+'/m209/Keywheel.h']
 
 	doc_config = configuration_data()
