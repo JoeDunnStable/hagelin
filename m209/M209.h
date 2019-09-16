@@ -135,6 +135,11 @@ public:
 		      string KeyDir, bool CipherMode,
 		      istream& InText, ostream& OutText);
 
+	/// Convert bitset representation lugbar to lug positions
+	static void bitset2lugs(bitset<NUM_WHEELS> a, char& a1, char& a2);
+
+	/// Compare two lugbars for sorting purposes
+	static bool CompareBars(bitset<NUM_WHEELS> a, bitset<NUM_WHEELS> b);
 };
 
 

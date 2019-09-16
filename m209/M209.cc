@@ -204,27 +204,11 @@ void M209::PrintKey(string KeyListIndicator, string NetIndicator,
   for (i = 0; i < NUM_LUG_BARS; i++) {
     os << setfill('0') << setw(2) << (i+1);
     
-    vector<char> lugs;
-    for (int j=0; j< NUM_WHEELS; ++j)
-      if (Drum[i][j]) lugs.push_back('1'+j);
-    
-    if (lugs.size() == 0) {
-      c1=c2='0';
-    } else if (lugs.size()==1 && (lugs[0]=='1' || lugs[0] == '2')) {
-      // By popular request: order lugs in the way they will be physically set
-      // to avoid interference with left '0' position.
-      c1 = lugs[0];
-      c2 = '0';
-    } else if (lugs.size()==1){
-      c1 = '0';
-      c2 = lugs[0];
-    } else if (lugs.size() == 2) {
-      c1 = lugs[0];
-      c2 = lugs[1];
-    } else {
-      throw std::runtime_error("m209.PrintKey: More than two lugs on lugbar");
-    }
-    
+    bitset2lugs(Drum[i], c1, c2);
+    // by popular demand
+	if (c1 == '0' && (c2 == '1' || c2 == '2'))
+		swap(c1, c2);
+
     os << ' ' << c1 << '-' << c2 << ' ';
     
     for (j = 0; j < NUM_WHEELS; j++) {

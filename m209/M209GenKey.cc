@@ -43,36 +43,39 @@ static ptrdiff_t doRandom(ptrdiff_t i) {
   return u_0_im1(gen);
 }
 
+/// convert bitset representation to lugs
+void M209::bitset2lugs(bitset<NUM_WHEELS> a, char& a1, char& a2) {
+	vector<char> lugs;
+	for (int i = 0; i < NUM_WHEELS; ++i)
+		if (a[i]) lugs.push_back('1' + i);
+	if (lugs.size() == 0) {
+		a1 = '0';
+		a2 = '0';
+	}
+	else if (lugs.size() == 1) {
+		a1 = '0';
+		a2 = lugs[0];
+	}
+	else if (lugs.size() == 2) {
+		a1 = lugs[0];
+		a2 = lugs[1];
+	}
+	else {
+		throw std::runtime_error("M209::compare: More than two lugs present.");
+	}
+}
 
 //! Compare two lug bars on the drum, for sorting.
 //
 //! Assumes no more than two lugs are active. Sorts based
 //! on the text representation of the lug settings.
 //
-static bool CompareBars(bitset <NUM_WHEELS> a, bitset <NUM_WHEELS> b) {
+bool M209::CompareBars(bitset <NUM_WHEELS> a, bitset <NUM_WHEELS> b) {
   int    i, ai, bi;
   char  a1, a2, b1, b2;
   
-  
-  for (i=0; i<NUM_WHEELS && !a[i]; i++);
-  a1 = a[i] ? '1'+i : '0';
-  
-  for (++i; i<NUM_WHEELS && !a[i]; i++);
-  a2 = a[i] ? '1'+i : '0';
-  
-  if (a1 > a2) {
-    swap(a1, a2);
-  }
-  
-  for (i=0; i<NUM_WHEELS && !b[i]; i++);
-  b1 = b[i] ? '1'+i : '0';
-  
-  for (++i; i<NUM_WHEELS && !b[i]; i++);
-  b2 = b[i] ? '1'+i : '0';
-  
-  if (b1 > b2) {
-    swap(b1, b2);
-  }
+  bitset2lugs(a, a1, a2);
+  bitset2lugs(b, b1, b2);
   
   ai = ((int)a1 << 8) | a2;
   bi = ((int)b1 << 8) | b2;
