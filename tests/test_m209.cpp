@@ -14,7 +14,9 @@ using std::endl;
 using std::ifstream;
 #include <sstream>
 using std::stringstream;
-#define BOOST_TEST_MODULE test_enigma_m4
+#include <boost/filesystem.hpp>
+using boost::filesystem::path;
+#define BOOST_TEST_MODULE test_m209
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 
@@ -36,7 +38,7 @@ BOOST_AUTO_TEST_CASE(test_construction){
 }
 
 BOOST_AUTO_TEST_CASE(cipher_test){
-  string src_dir(SOURCE_DIRECTORY);
+  string src_dir(getenv("MESON_SOURCE_ROOT"));
   M209 m209;
   bool AutoIndicator = true;
   string KeyListIndicator = "";
@@ -54,7 +56,7 @@ BOOST_AUTO_TEST_CASE(cipher_test){
     
     ifstream chk(src_dir + "/tests/deciphered.txt");
     if (!chk) {
-      cerr << "Unable to open check directory" << endl;
+      cerr << "Unable to open check file: " <<(src_dir + "/tests/deciphered.txt") << endl;
       BOOST_TEST(false);
     } else {
       bool f_okay = true;
@@ -68,31 +70,36 @@ BOOST_AUTO_TEST_CASE(cipher_test){
       BOOST_TEST(f_okay);
     }
   } else {
-    cerr << "Unable to open input directory";
+    cerr << "Unable to open input file: " << (src_dir + "/tests/cipher.txt") << endl;
     BOOST_TEST(false);
   }
   
 }
 
 BOOST_AUTO_TEST_CASE(keyread_test){
-  string src_dir(SOURCE_DIRECTORY);
+  string src_dir(getenv("MESON_SOURCE_ROOT"));
   M209 m209;
   string KeyFileName = src_dir + "/tests/mangled.m209key";
   string KeyListIndicator = "";
   string NetIndicator = "";
   stringstream out;
-  m209.LoadKey(KeyFileName, KeyListIndicator, NetIndicator);
-  m209.PrintKey(KeyListIndicator, NetIndicator, out);
-  ifstream chk(src_dir + "/tests/MB.m209key");
-  bool f_okay = true;
-  while (chk) {
-    char c1, c2;
-    out >> c1;
-    chk >> c2;
-    if (c1 !=c2)
-      f_okay=false;
+  if (m209.LoadKey(KeyFileName, KeyListIndicator, NetIndicator)) {
+	  m209.PrintKey(KeyListIndicator, NetIndicator, out);
+	  ifstream chk(src_dir + "/tests/MB.m209key");
+	  bool f_okay = true;
+	  while (chk) {
+		  char c1, c2;
+		  out >> c1;
+		  chk >> c2;
+		  if (c1 != c2)
+			  f_okay = false;
+	  }
+	  BOOST_TEST(f_okay);
   }
-  BOOST_TEST(f_okay);
+  else {
+	  cerr << "Unable to load key file: " << KeyFileName << endl;
+	  BOOST_TEST(false);
+  }
 }
 
 

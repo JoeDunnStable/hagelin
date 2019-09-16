@@ -18,7 +18,7 @@ if compiler == 'msvc'
 endif
 
 #Boost header and some libraries.
-boostdep = dependency('boost', modules : ['regex', 'program_options', 'iostreams'],  required : true)
+boostdep = dependency('boost', modules : ['program_options', 'filesystem', 'system'],  required : true)
 
 hagelin_config = configuration_data()
 hagelin_config.set('PACKAGE_NAME', meson.project_name())
