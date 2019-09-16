@@ -181,27 +181,28 @@ void M209::ClearKey(void) {
 }
 
 
-void M209::PrintKey(string KeyListIndicator, string NetIndicator) {
+void M209::PrintKey(string KeyListIndicator, string NetIndicator,
+                    ostream& os) {
   int    i, j;
   char  c1, c2;
   
   if (!NetIndicator.empty()) {
-    cout << "NET INDICATOR:      " << NetIndicator << endl;
+    os << "NET INDICATOR:      " << NetIndicator << endl;
   }
   if (KeyListIndicator.length() == 2) {
-    cout << "KEY LIST INDICATOR: " << KeyListIndicator << endl;
+    os << "KEY LIST INDICATOR: " << KeyListIndicator << endl;
   }
   
-  cout << "-------------------------------" << endl;
-  cout << "NR LUGS  1  2  3  4  5  6" << endl;
-  cout << "-------------------------------" << endl;
+  os << "-------------------------------" << endl;
+  os << "NR LUGS  1  2  3  4  5  6" << endl;
+  os << "-------------------------------" << endl;
   
   for (i=0; i<NUM_WHEELS; i++) {
     Wheels[i].SetPosition(0);
   }
   
   for (i = 0; i < NUM_LUG_BARS; i++) {
-    cout << setfill('0') << setw(2) << (i+1);
+    os << setfill('0') << setw(2) << (i+1);
     
     for (j=0; j<NUM_WHEELS && !Drum[i][j]; j++);
     c1 = Drum[i][j] ? '1'+j : '0';
@@ -219,26 +220,26 @@ void M209::PrintKey(string KeyListIndicator, string NetIndicator) {
       swap(c1, c2);
     }
     
-    cout << ' ' << c1 << '-' << c2 << ' ';
+    os << ' ' << c1 << '-' << c2 << ' ';
     
     for (j = 0; j < NUM_WHEELS; j++) {
-      cout << "  ";
+      os << "  ";
       if (i >= Wheels[j].GetWheelSize()) {
-        cout << ' ';
+        os << ' ';
       } else if (Wheels[j].ReadPin()) {
-        cout << Wheels[j].GetPosName();
+        os << Wheels[j].GetPosName();
       } else {
-        cout << '-';
+        os << '-';
       }
       Wheels[j].Rotate(1);
     }
     
-    cout << endl;
+    os << endl;
   }
   
-  cout << "-------------------------------" << endl;
-  cout << "26 LETTER CHECK" << endl;
-  cout << endl;
+  os << "-------------------------------" << endl;
+  os << "26 LETTER CHECK" << endl;
+  os << endl;
   
   for (i=0; i<NUM_WHEELS; i++) {
     Wheels[i].SetPosition(0);
@@ -247,14 +248,14 @@ void M209::PrintKey(string KeyListIndicator, string NetIndicator) {
   LetterCounter = 0;
   
   for (i=0; i<26; i++) {
-    cout << Cipher('A');
+    os << Cipher('A');
     if ((i % 5) == 4) {
-      cout << ' ';
+      os << ' ';
     }
   }
   
-  cout << endl;
-  cout << "-------------------------------" << endl;
+  os << endl;
+  os << "-------------------------------" << endl;
   
   
 }
@@ -981,6 +982,5 @@ void M209::CipherStream(bool AutoIndicator,
   
   // Finally, send buffered output to output stream.
   OutText << OutBuf.str();
-  exit(0);
 }
 

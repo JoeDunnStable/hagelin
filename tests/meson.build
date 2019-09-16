@@ -1,7 +1,13 @@
+src = ['../m209/Keywheel.cc',
+       '../m209/M209.cc',
+       '../m209/M209GenKey.cc',
+       '../m209/Keywheel.h',
+       '../m209/M209.h',
+       'test_m209.cpp']
 
-cipher_test = find_program('cipher-test')
+test_m209 = executable('test_m209', src,
+                       dependencies : boostdep,
+                       include_directories : incdir,
+                       install: false)
 
-test('cipher-test',cipher_test, env : 'srcdir='+meson.source_root())
-
-keyread_test = find_program('keyread-test')
-test('keyread-test', keyread_test, env: 'srcdir='+meson.source_root())
+run_target('check', command : test_m209)

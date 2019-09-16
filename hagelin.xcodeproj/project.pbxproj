@@ -11,10 +11,23 @@
 		6F69CFE7232A00F300696078 /* M209GenKey.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6F69CFE3232A00F300696078 /* M209GenKey.cc */; };
 		6F69CFE8232A00F300696078 /* M209.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6F69CFE4232A00F300696078 /* M209.cc */; };
 		6F69CFE9232A00F300696078 /* Keywheel.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6F69CFE5232A00F300696078 /* Keywheel.cc */; };
+		6F8FE28A232EC068000489D3 /* test_m209.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F8FE289232EC068000489D3 /* test_m209.cpp */; };
+		6F8FE28E232EC33F000489D3 /* Keywheel.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6F69CFE5232A00F300696078 /* Keywheel.cc */; };
+		6F8FE28F232EC347000489D3 /* M209.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6F69CFE4232A00F300696078 /* M209.cc */; };
+		6F8FE290232EC34D000489D3 /* M209GenKey.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6F69CFE3232A00F300696078 /* M209GenKey.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		6F69CFD62329FDB300696078 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		6F8FE285232EC068000489D3 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -43,15 +56,27 @@
 		6F69CFED232B374100696078 /* config.h.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.h.in; sourceTree = "<group>"; };
 		6F69CFEE232C2A1300696078 /* meson.build */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = meson.build; sourceTree = "<group>"; };
 		6F69CFEF232C2A3100696078 /* meson.build */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = meson.build; sourceTree = "<group>"; };
-		6F69CFF1232C2B1C00696078 /* keyread-test */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "keyread-test"; sourceTree = "<group>"; };
 		6F69CFF2232C2B1D00696078 /* meson.build */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = meson.build; sourceTree = "<group>"; };
-		6F69CFF3232C2B1D00696078 /* cipher-test */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "cipher-test"; sourceTree = "<group>"; };
+		6F8FE27F232EAF10000489D3 /* cipher.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cipher.txt; sourceTree = "<group>"; };
+		6F8FE281232EAFB7000489D3 /* plain.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plain.txt; sourceTree = "<group>"; };
+		6F8FE282232EB0D5000489D3 /* MB.m209key */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MB.m209key; sourceTree = "<group>"; };
+		6F8FE287232EC068000489D3 /* tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tests; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F8FE289232EC068000489D3 /* test_m209.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_m209.cpp; sourceTree = "<group>"; };
+		6F8FE291232F1759000489D3 /* deciphered.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = deciphered.txt; sourceTree = "<group>"; };
+		6F8FE292232F175A000489D3 /* mangled.m209key */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mangled.m209key; sourceTree = "<group>"; };
 		6FF4BC6D232CA1BD0090B8F5 /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		6FF4BC6E232CB6490090B8F5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		6F69CFD52329FDB300696078 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F8FE284232EC068000489D3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -92,7 +117,7 @@
 				6F43FCD7232D572B0098362F /* doc */,
 				6F69CFDA2329FDB300696078 /* m209 */,
 				6F43FCDC232D7F210098362F /* python */,
-				6F69CFF0232C2A8700696078 /* tests */,
+				6F8FE288232EC068000489D3 /* tests */,
 				6F69CFD92329FDB300696078 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -101,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				6F69CFD82329FDB300696078 /* m209 */,
+				6F8FE287232EC068000489D3 /* tests */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -119,12 +145,16 @@
 			path = m209;
 			sourceTree = "<group>";
 		};
-		6F69CFF0232C2A8700696078 /* tests */ = {
+		6F8FE288232EC068000489D3 /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				6F69CFF3232C2B1D00696078 /* cipher-test */,
-				6F69CFF1232C2B1C00696078 /* keyread-test */,
+				6F8FE291232F1759000489D3 /* deciphered.txt */,
+				6F8FE292232F175A000489D3 /* mangled.m209key */,
+				6F8FE282232EB0D5000489D3 /* MB.m209key */,
 				6F69CFF2232C2B1D00696078 /* meson.build */,
+				6F8FE281232EAFB7000489D3 /* plain.txt */,
+				6F8FE27F232EAF10000489D3 /* cipher.txt */,
+				6F8FE289232EC068000489D3 /* test_m209.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -149,6 +179,23 @@
 			productReference = 6F69CFD82329FDB300696078 /* m209 */;
 			productType = "com.apple.product-type.tool";
 		};
+		6F8FE286232EC068000489D3 /* tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F8FE28B232EC068000489D3 /* Build configuration list for PBXNativeTarget "tests" */;
+			buildPhases = (
+				6F8FE283232EC068000489D3 /* Sources */,
+				6F8FE284232EC068000489D3 /* Frameworks */,
+				6F8FE285232EC068000489D3 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = tests;
+			productName = test_m209;
+			productReference = 6F8FE287232EC068000489D3 /* tests */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -159,6 +206,9 @@
 				ORGANIZATIONNAME = "Joseph Dunn";
 				TargetAttributes = {
 					6F69CFD72329FDB300696078 = {
+						CreatedOnToolsVersion = 10.3;
+					};
+					6F8FE286232EC068000489D3 = {
 						CreatedOnToolsVersion = 10.3;
 					};
 				};
@@ -176,6 +226,7 @@
 			projectRoot = "";
 			targets = (
 				6F69CFD72329FDB300696078 /* m209 */,
+				6F8FE286232EC068000489D3 /* tests */,
 			);
 		};
 /* End PBXProject section */
@@ -189,6 +240,17 @@
 				6F69CFE7232A00F300696078 /* M209GenKey.cc in Sources */,
 				6F69CFE9232A00F300696078 /* Keywheel.cc in Sources */,
 				6F69CFE8232A00F300696078 /* M209.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F8FE283232EC068000489D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F8FE290232EC34D000489D3 /* M209GenKey.cc in Sources */,
+				6F8FE28F232EC347000489D3 /* M209.cc in Sources */,
+				6F8FE28A232EC068000489D3 /* test_m209.cpp in Sources */,
+				6F8FE28E232EC33F000489D3 /* Keywheel.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,6 +400,22 @@
 			};
 			name = Release;
 		};
+		6F8FE28C232EC068000489D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		6F8FE28D232EC068000489D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -355,6 +433,15 @@
 			buildConfigurations = (
 				6F69CFE02329FDB300696078 /* Debug */,
 				6F69CFE12329FDB300696078 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6F8FE28B232EC068000489D3 /* Build configuration list for PBXNativeTarget "tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F8FE28C232EC068000489D3 /* Debug */,
+				6F8FE28D232EC068000489D3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

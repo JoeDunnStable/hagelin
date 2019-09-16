@@ -98,7 +98,7 @@ public:
 
     //! Print current key setting.
     //
-    void PrintKey(string KeyListIndicator, string NetIndicator);
+    void PrintKey(string KeyListIndicator, string NetIndicator, ostream& os = cout);
 
 
     //! Load key from file.

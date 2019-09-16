@@ -1,6 +1,7 @@
 
 /* Version number of package */
 #define VERSION "@PACKAGE_VERSION@"
+#define SOURCE_DIRECTORY "@SOURCE_DIRECTORY@"
 
 #include <random>
 #ifdef SOURCE
