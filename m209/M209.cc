@@ -204,20 +204,25 @@ void M209::PrintKey(string KeyListIndicator, string NetIndicator,
   for (i = 0; i < NUM_LUG_BARS; i++) {
     os << setfill('0') << setw(2) << (i+1);
     
-    for (j=0; j<NUM_WHEELS && !Drum[i][j]; j++);
-    c1 = Drum[i][j] ? '1'+j : '0';
+    vector<char> lugs;
+    for (int j=0; j< NUM_WHEELS; ++j)
+      if (Drum[i][j]) lugs.push_back('1'+j);
     
-    for (++j; j<NUM_WHEELS && !Drum[i][j]; j++);
-    c2 = Drum[i][j] ? '1'+j : '0';
-    
-    if (c1 > c2) {
-      swap(c1, c2);
-    }
-    
-    // By popular request: order lugs in the way they will be physically set
-    // to avoid interference with left '0' position.
-    if ((c1 == '0') && ((c2 == '1') || (c2 == '2'))) {
-      swap(c1, c2);
+    if (lugs.size() == 0) {
+      c1=c2='0';
+    } else if (lugs.size()==1 && (lugs[0]=='1' || lugs[0] == '2')) {
+      // By popular request: order lugs in the way they will be physically set
+      // to avoid interference with left '0' position.
+      c1 = lugs[0];
+      c2 = '0';
+    } else if (lugs.size()==1){
+      c1 = '0';
+      c2 = lugs[0];
+    } else if (lugs.size() == 2) {
+      c1 = lugs[0];
+      c2 = lugs[1];
+    } else {
+      throw std::runtime_error("m209.PrintKey: More than two lugs on lugbar");
     }
     
     os << ' ' << c1 << '-' << c2 << ' ';
@@ -278,6 +283,11 @@ bool M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetInd
   if (!Quiet) {
     cerr << "Loading key file " << fname << endl;
   }
+  LoadKey(keyfile, KeyListIndicator, NetIndicator);
+  return true;
+}
+
+void M209::LoadKey(istream& keyfile, string& KeyListIndicator, string& NetIndicator) {
 
   string              line;                         // single line read from key file
   std::regex  netind_regex;          // regex matching net indicator line
@@ -333,7 +343,7 @@ bool M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetInd
   this->ClearKey();
   
   if (Verbose) {
-    cerr << "Reading key file \"" << fname << "\"" << endl;
+    cerr << "Reading key file " << endl;
   }
   
   // Read key file one line at a time
@@ -404,40 +414,10 @@ bool M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetInd
       size_t num_pins = pins.length();
       
       // check for correct number of pins
-      //
-      // TODO: Figure out pin counts by querying Wheel instances
-      // for their sizes rather than hard-coding counts. Maybe also
-      // support pin counts not monotonically decreasing from left
-      // to right, for future expansion to machines with interchangeable
-      // wheels?
-      int expected_pins;
-      switch (lugbar_num) {
-        case 26:
-          expected_pins = 0;
-          break;
-        case 25:
-          expected_pins = 1;
-          break;
-        case 24:
-        case 23:
-          expected_pins = 2;
-          break;
-        case 22:
-        case 21:
-          expected_pins = 3;
-          break;
-        case 20:
-        case 19:
-          expected_pins = 4;
-          break;
-        case 18:
-        case 17:
-          expected_pins = 5;
-          break;
-        default:
-          expected_pins = 6;
-          break;
-      }
+      int expected_pins=0;
+      for (int j=0; j<NUM_WHEELS; ++j)
+        expected_pins += Wheels[j].GetWheelSize() > lugbar_num;
+      
       if (num_pins != expected_pins) {
         throw std::range_error("M209::LoadKey(): Key file error:"
                                " Incorrect number of pins found.");
@@ -564,8 +544,6 @@ bool M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetInd
   for (int n=0; n<NUM_WHEELS; n++) {
     Wheels[n].SetPosition(0);
   }
-  keyfile.close();
-  return true;
 }
 
 

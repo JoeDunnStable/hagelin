@@ -105,6 +105,7 @@ public:
     //
     bool LoadKey(const string& fname);
     bool LoadKey(const string& fname, string& KeyListIndicator, string& NetIndicator);
+    void LoadKey(istream& keyfile, string&KeyListIndicator, string& NetIndicator);
 
 
     //! Generate a random key.

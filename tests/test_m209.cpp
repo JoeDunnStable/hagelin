@@ -14,8 +14,6 @@ using std::endl;
 using std::ifstream;
 #include <sstream>
 using std::stringstream;
-#include <boost/filesystem.hpp>
-using boost::filesystem::path;
 #define BOOST_TEST_MODULE test_m209
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
@@ -102,4 +100,82 @@ BOOST_AUTO_TEST_CASE(keyread_test){
   }
 }
 
+BOOST_AUTO_TEST_CASE(genkey_test){
+  M209 m209;
+  bool AutoIndicator = false;
+  string KeyListIndicator = "";
+  string NetIndicator = "";
+  string KeyDir;
+  bool CipherMode = true;
+  stringstream key_stream;
+  m209.GenKey();
+  m209.PrintKey(KeyListIndicator, NetIndicator, key_stream);
+  stringstream plain_text("HELLO WORLD");
+  stringstream cipher_text;
+  vector<string> initial_pos{"A","A","A","A","A","A"};
+  m209.SetWheels(initial_pos);
+  
+  m209.CipherStream(AutoIndicator,
+                    KeyListIndicator,
+                    NetIndicator,
+                    KeyDir, CipherMode, plain_text, cipher_text);
+  
+  m209.LoadKey(key_stream, KeyListIndicator, NetIndicator);
+  
+  CipherMode = false;
+  stringstream deciphered_text;
+  m209.SetWheels(initial_pos);
+  
+  m209.CipherStream(AutoIndicator,
+                    KeyListIndicator,
+                    NetIndicator,
+                    KeyDir, CipherMode, cipher_text, deciphered_text);
+  
+  plain_text.seekg(0);
+  bool f_okay = true;
+  char c1;
+  while (plain_text >> c1) {
+    char c2;
+    deciphered_text >> c2;
+    if (c1 != c2)
+      f_okay = false;
+  }
+  BOOST_TEST(f_okay);
+}
+
+BOOST_AUTO_TEST_CASE(automatic_mode_test){
+  string src_dir(getenv("MESON_SOURCE_ROOT"));
+  M209 m209;
+  bool AutoIndicator = true;
+  string KeyListIndicator = "MB";
+  string NetIndicator = "TEST";
+  bool CipherMode = true;
+  string KeyDir = src_dir + "/tests";
+  stringstream plain_text("HELLO WORLD");
+  stringstream cipher_text;
+  
+  m209.CipherStream(AutoIndicator,
+                    KeyListIndicator,
+                    NetIndicator,
+                    KeyDir, CipherMode, plain_text, cipher_text);
+  
+  CipherMode = false;
+  stringstream deciphered_text;
+  
+  m209.CipherStream(AutoIndicator,
+                    KeyListIndicator,
+                    NetIndicator,
+                    KeyDir, CipherMode, cipher_text, deciphered_text);
+  
+  plain_text.seekg(0);
+  bool f_okay = true;
+  char c1;
+  while (plain_text >> c1) {
+    char c2;
+    deciphered_text >> c2;
+    if (c1 != c2)
+      f_okay = false;
+  }
+  BOOST_TEST(f_okay);
+}
 

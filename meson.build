@@ -1,5 +1,5 @@
 project('Hagelin', 'cpp', default_options : ['cpp_std=c++11'],
-        version : '2019-09-115', license : 'GPL v3')
+        version : '2019-09-16', license : 'GPL v3')
 
 compiler=meson.get_compiler('cpp').get_id()
 
@@ -18,7 +18,7 @@ if compiler == 'msvc'
 endif
 
 #Boost header and some libraries.
-boostdep = dependency('boost', modules : ['program_options', 'filesystem', 'system'],  required : true)
+boostdep = dependency('boost', modules : ['program_options'],  required : true)
 
 hagelin_config = configuration_data()
 hagelin_config.set('PACKAGE_NAME', meson.project_name())
@@ -27,7 +27,6 @@ hagelin_config.set('PACKAGE_COMPILER', meson.get_compiler('cpp').get_id())
 hagelin_config.set('PACKAGE_COMPILER_VERSION',meson.get_compiler('cpp').version())
 hagelin_config.set('PACKAGE_OS',host_machine.system())
 hagelin_config.set('BOOST_VERSION',boostdep.version())
-hagelin_config.set('SOURCE_DIRECTORY', meson.source_root())
 
 hagelin_config_h = configure_file(input : 'config.h.in',
 				  output : 'config.h',
