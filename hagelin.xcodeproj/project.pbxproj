@@ -15,6 +15,8 @@
 		6F8FE28E232EC33F000489D3 /* Keywheel.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6F69CFE5232A00F300696078 /* Keywheel.cc */; };
 		6F8FE28F232EC347000489D3 /* M209.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6F69CFE4232A00F300696078 /* M209.cc */; };
 		6F8FE290232EC34D000489D3 /* M209GenKey.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6F69CFE3232A00F300696078 /* M209GenKey.cc */; };
+		6FE7BE5223345A720044053A /* AppendixII.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FE7BE5123345A720044053A /* AppendixII.cpp */; };
+		6FE7BE5323345A720044053A /* AppendixII.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FE7BE5123345A720044053A /* AppendixII.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -64,6 +66,7 @@
 		6F8FE289232EC068000489D3 /* test_m209.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_m209.cpp; sourceTree = "<group>"; };
 		6F8FE291232F1759000489D3 /* deciphered.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = deciphered.txt; sourceTree = "<group>"; };
 		6F8FE292232F175A000489D3 /* mangled.m209key */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mangled.m209key; sourceTree = "<group>"; };
+		6FE7BE5123345A720044053A /* AppendixII.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppendixII.cpp; sourceTree = "<group>"; };
 		6FF4BC6D232CA1BD0090B8F5 /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		6FF4BC6E232CB6490090B8F5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -141,6 +144,7 @@
 				6F69CFE2232A00F300696078 /* m209_main.cc */,
 				6F69CFE4232A00F300696078 /* M209.cc */,
 				6F69CFE3232A00F300696078 /* M209GenKey.cc */,
+				6FE7BE5123345A720044053A /* AppendixII.cpp */,
 			);
 			path = m209;
 			sourceTree = "<group>";
@@ -240,6 +244,7 @@
 				6F69CFE7232A00F300696078 /* M209GenKey.cc in Sources */,
 				6F69CFE9232A00F300696078 /* Keywheel.cc in Sources */,
 				6F69CFE8232A00F300696078 /* M209.cc in Sources */,
+				6FE7BE5223345A720044053A /* AppendixII.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,6 +256,7 @@
 				6F8FE28F232EC347000489D3 /* M209.cc in Sources */,
 				6F8FE28A232EC068000489D3 /* test_m209.cpp in Sources */,
 				6F8FE28E232EC33F000489D3 /* Keywheel.cc in Sources */,
+				6FE7BE5323345A720044053A /* AppendixII.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

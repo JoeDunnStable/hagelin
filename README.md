@@ -50,8 +50,8 @@ now been ported to the following:
 
 DOCUMENTATION
 
-The included file "m209.man" in the doc directory is a Unix manual page. It is normally
-installed by the "make install" command. To read it without
+The included file "m209.1" in the doc directory is a Unix manual page. It is normally
+installed by the "ninja install" command. To read it without
 installing it, try this:
 
     cd doc
@@ -71,11 +71,13 @@ For more information about the M-209 simulator:
 AUTHORS
 
 Joseph Dunn <JoeDunn144@gmail.com>
+
 Mark J. Blair, NF6X <nf6x@nf6x.net>
 
 COPYRIGHT
 
 Copyright (C) 2019 Joseph Dunn
+
 Copyright (C) 2009-2013 Mark J. Blair, NF6X
 
 Hagelin is free software: you can redistribute it and/or modify it

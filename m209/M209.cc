@@ -77,7 +77,7 @@ static const int offsets[] = {-11, -11, -10, -9, -8, -7};
 M209::M209() {
   int    i;
   
-  Drum.resize(NUM_LUG_BARS);
+//  Drum.resize(NUM_LUG_BARS);
   
   Wheels.resize(NUM_WHEELS);
   for (i = 0; i < NUM_WHEELS; i++) {

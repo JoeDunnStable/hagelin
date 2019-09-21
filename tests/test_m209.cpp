@@ -108,7 +108,7 @@ BOOST_AUTO_TEST_CASE(genkey_test){
   string KeyDir;
   bool CipherMode = true;
   stringstream key_stream;
-  m209.GenKey();
+  m209.GenKey1944();
   m209.PrintKey(KeyListIndicator, NetIndicator, key_stream);
   stringstream plain_text("HELLO WORLD");
   stringstream cipher_text;

@@ -180,9 +180,11 @@ int main(int argc, char **argv)
     CipherMode = false;
     DoCipher = true;
   }
+  
   if (vm.count("-g")) {
-    m209.GenKey();
+    m209.GenKey1944();
   }
+  
   if (vm.count("-i")) {
     AutoIndicator = false;
     if (indicator.size() != NUM_WHEELS) {

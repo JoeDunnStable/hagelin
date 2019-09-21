@@ -16,6 +16,7 @@ if(doxygen.found())
 				  output : 'Doxyfile',
 				  configuration : doc_config,
 				  install : false)
+          
 	custom_target('doxygen',
 		      input : doxyfile,
 		      output : ['html', 'latex']  ,

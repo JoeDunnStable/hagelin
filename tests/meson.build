@@ -3,6 +3,7 @@ src = ['../m209/Keywheel.cc',
        '../m209/M209GenKey.cc',
        '../m209/Keywheel.h',
        '../m209/M209.h',
+       '../m209/AppendixII.cpp',
        'test_m209.cpp']
 
 test_m209 = executable('test_m209', src,
