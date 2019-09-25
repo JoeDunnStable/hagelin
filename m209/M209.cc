@@ -860,7 +860,7 @@ void M209::CipherStream(bool AutoIndicator,
         exit(1);
       }
     }
-  }
+  } // if AutoIndicator
   
   while (!MsgText.empty()) {
     InC = MsgText.front();

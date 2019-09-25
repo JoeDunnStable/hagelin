@@ -124,7 +124,7 @@ public:
   void PrintKey(string KeyListIndicator, string NetIndicator,
                 ostream& os = cout);
   
-  
+  array<bitset<NUM_WHEELS>, NUM_LUG_BARS> getDrum() { return Drum;}
   //! Load key from file.
   //
   bool LoadKey(const string& fname);

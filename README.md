@@ -44,9 +44,21 @@ follows:
 The program was developed an OS X using Apple's clang++ compiler and it's
 now been ported to the following:
 
-* Window using the msvc compiler, 
+* Windows using the msvc compiler, 
 * g++ and clang++ using mingw64, and
 * g++ and clang++ on Ubuntu linux.
+
+M209GROUP KeyLists
+
+Mark Blair has used the GenKey method in M209 to generate keylists for use by
+the M209GROUP.  These list are available for download at:
+
+    https://gitlab.com/NF6X_Crypto/m209group-key-lists
+
+Mark also developed a method for translating a NetIndicator together with a date
+into a two letter KeyListIndicator.  Mark's python program m209-indicator.py implements
+this procedure for the current date.  A program which accepts both a NetIndicator and 
+arbitrary date is contained in the M209Group subdirectory.
 
 DOCUMENTATION
 
