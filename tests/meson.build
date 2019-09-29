@@ -14,5 +14,5 @@ test_m209 = executable('test_m209', src,
                        install: false)
 
 test('test_m209', test_m209,
-      env: ['M209_KEYLIST_DIR=/Users/jdunn/Documents/XCode/m209group-key-lists/',
+      env: ['M209_KEYLIST_DIR='+meson.source_root()+'/../m209group-key-lists/',
             'MESON_SOURCE_ROOT='+meson.source_root()])
