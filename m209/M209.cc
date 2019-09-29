@@ -259,7 +259,14 @@ bool M209::LoadKey(const string& fname) {
 }
 
 bool M209::LoadKey(date d, string& KeyListIndicator, string& NetIndicator) {
-  string root_dir = getenv("M209_KEYLIST_DIR");
+  string root_dir;
+  if (getenv("M209_KEYLIST_DIR") != nullptr)
+    root_dir = getenv("M209_KEYLIST_DIR");
+  else {
+    cerr << "ERROR: Environmental variable M209_KEYLIST_DIR must be defined to";
+    cerr << " use the -A mode." << endl;
+    exit(1);
+  }
   if (root_dir.back() != '/')
     root_dir += "/";
   string d_str = to_simple_string(d);

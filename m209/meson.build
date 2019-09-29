@@ -34,7 +34,7 @@ test('test_A_c_p', m209,
      should_fail: true)
 test('test_A_d', m209,
      args : ['-A', '-d',
-       '--fileIn', meson.build_root()+'/tests/cipher.txt',
+       '--fileIn', meson.source_root()+'/tests/cipher_A.txt',
        '--fileOut', meson.build_root()+'/tests/deciphered.txt'],
      env: 'M209_KEYLIST_DIR='+meson.source_root()+'/../m209group-key-lists/')
 test('test_A_c_n', m209,

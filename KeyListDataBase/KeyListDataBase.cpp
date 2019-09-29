@@ -61,16 +61,3 @@ date KeyListIndicator2Date(string NetIndicator, string KeyListIndicator) {
   return now - days(adj);
 }
 
-string KeyListDataBaseKeyFile (string NetIndicator,
-                         string KeyListIndicator) {
-  string root_dir = getenv("M209_KEYLIST_DIR");
-  date d = KeyListIndicator2Date(NetIndicator, KeyListIndicator);
-  string d_str = to_simple_string(d);
-  string y_str = d_str.substr(0,4);
-  string m_str = d_str.substr(5,3);
-  boost::to_upper(m_str);
-  string key_file = NetIndicator + "-" + y_str + "/" + m_str + "/keys/" + KeyListIndicator + ".txt";
-  return root_dir + key_file;
-}
-  
-
