@@ -2,9 +2,29 @@
 ///  main.cpp
 /// \package hagelin
 //
-//  Created by Joseph Dunn on 9/15/19.
-//  Copyright © 2019 Joseph Dunn. All rights reserved.
+/// \author Joseph Dunn on 9/15/19.
+/// \copyright © 2019 Joseph Dunn.
 //
+
+/**************************************************************************
+* Copyright (C) 2019 Joseph Dunn
+* Copyright (C) 2009-2013 Mark J. Blair, NF6X
+*
+* This file is part of Hagelin.
+*
+*  Hagelin is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  Hagelin is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with Hagelin.  If not, see <http://www.gnu.org/licenses/>.
+**************************************************************************/
 
 #include <iostream>
 using std::cout;
@@ -38,7 +58,8 @@ BOOST_AUTO_TEST_CASE(test_construction){
 BOOST_AUTO_TEST_CASE(cipher_test){
   string src_dir(getenv("MESON_SOURCE_ROOT"));
   M209 m209;
-  bool AutoIndicator = true;
+  bool AutoKey = false;
+  bool AutoMsgIndicator = true;
   string KeyListIndicator = "";
   string NetIndicator = "";
   string KeyDir = src_dir + "/tests";
@@ -47,7 +68,8 @@ BOOST_AUTO_TEST_CASE(cipher_test){
   if (in) {
     stringstream out;
     
-    m209.CipherStream(AutoIndicator,
+    m209.CipherStream(AutoKey,
+                      AutoMsgIndicator,
                       KeyListIndicator,
                       NetIndicator,
                       KeyDir, CipherMode, in, out);
@@ -102,7 +124,8 @@ BOOST_AUTO_TEST_CASE(keyread_test){
 
 BOOST_AUTO_TEST_CASE(genkey_test){
   M209 m209;
-  bool AutoIndicator = false;
+  bool AutoKey = false;
+  bool AutoMsgIndicator = false;
   string KeyListIndicator = "";
   string NetIndicator = "";
   string KeyDir;
@@ -115,7 +138,8 @@ BOOST_AUTO_TEST_CASE(genkey_test){
   vector<string> initial_pos{"A","A","A","A","A","A"};
   m209.SetWheels(initial_pos);
   
-  m209.CipherStream(AutoIndicator,
+  m209.CipherStream(AutoKey,
+                    AutoMsgIndicator,
                     KeyListIndicator,
                     NetIndicator,
                     KeyDir, CipherMode, plain_text, cipher_text);
@@ -126,7 +150,8 @@ BOOST_AUTO_TEST_CASE(genkey_test){
   stringstream deciphered_text;
   m209.SetWheels(initial_pos);
   
-  m209.CipherStream(AutoIndicator,
+  m209.CipherStream(AutoKey,
+                    AutoMsgIndicator,
                     KeyListIndicator,
                     NetIndicator,
                     KeyDir, CipherMode, cipher_text, deciphered_text);
@@ -143,10 +168,11 @@ BOOST_AUTO_TEST_CASE(genkey_test){
   BOOST_TEST(f_okay);
 }
 
-BOOST_AUTO_TEST_CASE(automatic_mode_test){
+BOOST_AUTO_TEST_CASE(auto_msg_test){
   string src_dir(getenv("MESON_SOURCE_ROOT"));
   M209 m209;
-  bool AutoIndicator = true;
+  bool AutoKey = false;
+  bool AutoMsgIndicator = true;
   string KeyListIndicator = "MB";
   string NetIndicator = "TEST";
   bool CipherMode = true;
@@ -154,7 +180,8 @@ BOOST_AUTO_TEST_CASE(automatic_mode_test){
   stringstream plain_text("HELLO WORLD");
   stringstream cipher_text;
   
-  m209.CipherStream(AutoIndicator,
+  m209.CipherStream(AutoKey,
+                    AutoMsgIndicator,
                     KeyListIndicator,
                     NetIndicator,
                     KeyDir, CipherMode, plain_text, cipher_text);
@@ -162,7 +189,47 @@ BOOST_AUTO_TEST_CASE(automatic_mode_test){
   CipherMode = false;
   stringstream deciphered_text;
   
-  m209.CipherStream(AutoIndicator,
+  m209.CipherStream(AutoKey,
+                    AutoMsgIndicator,
+                    KeyListIndicator,
+                    NetIndicator,
+                    KeyDir, CipherMode, cipher_text, deciphered_text);
+  
+  plain_text.seekg(0);
+  bool f_okay = true;
+  char c1;
+  while (plain_text >> c1) {
+    char c2;
+    deciphered_text >> c2;
+    if (c1 != c2)
+      f_okay = false;
+  }
+  BOOST_TEST(f_okay);
+}
+
+BOOST_AUTO_TEST_CASE(auto_key_test){
+  M209 m209;
+  bool AutoKey = true;
+  bool AutoMsgIndicator = true;
+  string NetIndicator = "M209GROUP";
+  string KeyListIndicator;
+  bool CipherMode = true;
+  string KeyDir = ".";
+  stringstream plain_text("HELLO WORLD");
+  stringstream cipher_text;
+  
+  m209.CipherStream(AutoKey,
+                    AutoMsgIndicator,
+                    KeyListIndicator,
+                    NetIndicator,
+                    KeyDir, CipherMode, plain_text, cipher_text);
+  
+  m209.ClearKey();
+  CipherMode = false;
+  stringstream deciphered_text;
+  
+  m209.CipherStream(AutoKey,
+                    AutoMsgIndicator,
                     KeyListIndicator,
                     NetIndicator,
                     KeyDir, CipherMode, cipher_text, deciphered_text);

@@ -27,6 +27,9 @@
 
 #include <iostream>
 using std::cerr;
+#include <fstream>
+using std::ifstream;
+using std::ofstream;
 
 #include <boost/algorithm/string.hpp>
 #include <boost/program_options.hpp>
@@ -34,6 +37,7 @@ using std::cerr;
 #define SOURCE
 #include "config.h"
 #include "M209.h"
+#include "KeyListDataBase.hpp"
 
 //! If true, enable verbose debugging messages to stderr.
 //
@@ -62,64 +66,6 @@ void PrintVersion(ostream& os) {
 
 //! Print version and usage instructions.
 //
-void PrintHelp(ostream& os) {
-  PrintVersion(os);
-  os << endl;
-  os << "Usage:" << endl;
-  os << "  m209 [-v] -c|-d [-k {keyfile}] -i {i1} {i2} {i3} {i4} {i5} {i6}"
-  << endl;
-  os << "  m209 [-v] -c|-d [-k {keyfile}] [-l {ki}] [-n {ni}] -a"
-  << endl;
-  os << "  m209 [-v] -g -p [-l {ki}] [-n {ni}]" << endl;
-  os << endl;
-  os << "Options:" << endl;
-  os << "  -a: Automatically generate/extract message indicators." << endl;
-  os << "      If key list indicator is specified in cipher mode," << endl
-  << "      automatically try to load key from either \"{ki}.txt\"" << endl
-  << "      or \"{ki}.m209key\"." << endl << endl
-  << "      In decipher mode, try to load key file based on key" << endl
-  << "      list indicator in ciphertext. In either case, if key" << endl
-  << "      file not found, use current setting, which is blank if" << endl
-  << "      -k option is not specified." << endl << endl
-  << "      In cipher mode, if -n option is specified or if net" << endl
-  << "      indicator is found in key file, then add a line to beginning" << endl
-  << "      of message with net indicator and group count."
-  << endl << endl;
-  os << "  -c: Encipher text from stdin to stdout." << endl << endl;
-  os << "  -d: Decipher text from stdin to stdout." << endl << endl;
-  os << "  -g: Generate random key settings." << endl << endl;
-  os << "  -i: Set initial wheel positions from following six arguments."
-  << endl << endl;
-  os << "  -k: Load key settings from specified file." << endl << endl;
-  os << "  -l: Use specified two-letter key list indicator." << endl << endl;
-  os << "  -n: Specify a net indicator for use in -a or -p modes." << endl
-  << "      Must be a single word consisting of only letters and/or numbers."
-  << endl << endl;
-  os << "  -p: Print key settings to stdout." << endl << endl;
-  os << "  -s: Skip number of leading characters specified in following argument."
-  << endl << endl;
-  os << "  -t: Specify directory containing key files for -a mode." << endl
-  << "      Default is current directory." << endl << endl;
-  os << "  -v: Print verbose debug messages to stderr." << endl << endl;
-  os << "  -q: Suppress informational messages." << endl << endl;
-  os << "  --version | -V:" << endl;
-  os << "      Print program version and copyright information to stderr."
-  << endl << endl;
-  os << "  --help | -h:" << endl;
-  os << "      Print version and help information to stderr."
-  << endl << endl;
-  os << "Examples:" << endl;
-  os << "  m209 -g -l AB -p >AB.txt" << endl << endl;
-  os << "  m209 -a -c -l AB <plain.txt >cipher.txt" << endl
-  << "    (note: requires file \"AB.txt\" or \"AB.m209key\" in current directory)"
-  << endl << endl;
-  os << "  m209 -a -d <cipher.txt >deciphered.txt" << endl
-  << "    (note: requires suitable key list in current directory)"
-  << endl << endl;
-  os << "  m209 -c -k AB.txt -i a b c d e f <plain.txt >cipher.txt"
-  << endl;
-}
-
 //! Main entry point.
 //
 int main(int argc, char **argv)
@@ -128,7 +74,10 @@ int main(int argc, char **argv)
   M209    m209;
   bool    CipherMode = true;
   bool    DoCipher = false;
-  bool    AutoIndicator = false;
+  string  FileIn;
+  string  FileOut;
+  bool    AutoKey = false;
+  bool    AutoMsgIndicator = false;
   vector<string>  indicator(NUM_WHEELS,"A");
   string KeyFileName;
   string    KeyListIndicator;
@@ -138,21 +87,24 @@ int main(int argc, char **argv)
   size_t      SkipChars = 0;
   
   // Parse command-line arguments
-  options_description desc("M209 options description");
+  options_description desc("m209 options description");
   desc.add_options()
   ("help,h", "produce help message")
   ("version,V", "print version and copyright")
-  (",a", bool_switch(&AutoIndicator), "Automatically generate/extract message indicators")
+  ("AutoKey,A", bool_switch(&AutoKey), "Automatically retrieve key from database\nusing NetIndicator and date for enciphering\nand the info in message header when deciphering.\nImplies autoMsg")
+  ("autoMsg,a", bool_switch(&AutoMsgIndicator), "Automatically generate/extract message indicators")
   (",c", "Encipher text from cin to cout")
   (",d", "Decipher text from cin to cout")
   (",g", "generate random key setting")
+  ("fileIn",value<string>(&FileIn),"File of text input file, cin if omitted")
+  ("fileOut",value<string>(&FileOut), "File name of text output file, cout if omitted")
   (",i", value<vector<string> >(&indicator)->multitoken(),"Set initial wheel positions from following six arguments" )
   (",k", value<string>(&KeyFileName), "Load key setting from specified file.")
   (",l", value<string>(&KeyListIndicator), "Use specified two-letter key list indicator.")
-  (",n", value<string>(&NetIndicator), "Specify a net indicator for use in -a or -p modes.\n   Must be a single word consisting of only letters and/or numbers.")
+  (",n", value<string>(&NetIndicator), "Specify a net indicator for use in -a or -p modes.\nMust be a single word consisting of only letters and/or numbers.")
   (",p", "print key settings to cout")
   (",s", value<size_t>(&SkipChars),"Skip number of leading characters specified in following argument.")
-  (",t", value<string>(&KeyDir), "Specify directory containing key files for -a mode.\n   Default is current directory.")
+  (",t", value<string>(&KeyDir), "Specify directory containing key files for -a mode.\nDefault is current directory.")
   (",q", bool_switch(&Quiet), "Suppress informational messages.")
   (",v", bool_switch(&Verbose), "Print verbose debug messages to stderr.");
   
@@ -161,15 +113,17 @@ int main(int argc, char **argv)
   notify(vm);
   
   if (vm.count("help")) {
-    PrintHelp(cerr);
+    PrintVersion(cerr);
+    cerr << desc << endl;
     exit(0);
   }
   if (vm.count("version")) {
     PrintVersion(cerr);
     exit(0);
   }
-  if (vm.count("-c") + vm.count("-d") > 1) {
-    cerr << "m209: at most one of the option c and d may be used" << endl;
+  if (vm.count("-c") + vm.count("-d")+ vm.count("-p") > 1) {
+    // There can be atmost one owner of out
+    cerr << "m209: at most one of the options c, d and p may be used" << endl;
     exit(1);
   }
   if (vm.count("-c")) {
@@ -185,14 +139,41 @@ int main(int argc, char **argv)
     m209.GenKey1944();
   }
   
+  if (AutoKey) {
+    AutoMsgIndicator = true;
+    if (vm.count("-k")){
+      cerr << "ERROR: -k connot be specified in AutoKey mode" << endl;
+      cerr << desc << endl;
+      exit(1);
+    }
+    if ((vm.count("-c") || vm.count("-p")) && NetIndicator.size()==0) {
+      NetIndicator = "M209GROUP";
+    }
+  } else if (AutoMsgIndicator) {
+    if (CipherMode && vm.count("-l")==0) {
+      cerr << "ERROR: -l must be specified for enciphering when -a is specified" << endl;
+      cerr << desc << endl;
+      exit(1);
+    }
+  } else {
+    if (DoCipher && (vm.count("-k")==0 || vm.count("-i")==0)) {
+      cerr << "ERROR: Both -k and -i must be specified in manual mode" << endl;
+      cerr << desc << endl;
+      exit(1);
+    }
+  }
+  if (DoCipher && (vm.count("-i")+AutoMsgIndicator !=1 )){
+    cerr << "ERROR: Either -i or autoMsg must be specified but not booth" << endl;
+    cerr << desc << endl;
+    exit(1);
+  }
   if (vm.count("-i")) {
-    AutoIndicator = false;
     if (indicator.size() != NUM_WHEELS) {
       cerr << "ERROR: -i requires "
       << dec << NUM_WHEELS
       << " arguments."
       << endl;
-      PrintHelp(cerr);
+      cerr << desc << endl;
       exit(1);
     }
     for (i=0; i<NUM_WHEELS; i++) {
@@ -200,35 +181,67 @@ int main(int argc, char **argv)
       if (indicator[i].size() != 1 || !isalpha(indicator[i][0])) {
         cerr << "ERROR: -i requires single-letter alphabetic arguments"
         << endl;
-        PrintHelp(cerr);
+        cerr << desc << endl;
         exit(1);
       }
       indicator[i][0] = toupper(indicator[i][0]);
     }
   }
-  if (vm.count("-k")){
-    m209.LoadKey(KeyFileName, KeyListIndicator, NetIndicator);
-  }
   if (vm.count("-l")) {
     if (KeyListIndicator.size() != 2) {
       cerr << "ERROR: Key List Indicator must consist of two letters."
       << endl;
-      PrintHelp(cerr);
+      cerr << desc << endl;
       exit(1);
     }
     boost::to_upper(KeyListIndicator);
     if (!isalpha(KeyListIndicator[0]) || !isalpha(KeyListIndicator[1])) {
       cerr << "ERROR: Key List Indicator must consist of two letters."
       << endl;
-      PrintHelp(cerr);
+      cerr << desc << endl;
       exit(1);
     }
   }
   if (vm.count("-n")) {
     boost::to_upper(NetIndicator);
   }
+  if (vm.count("-k")){
+    if (!m209.LoadKey(KeyFileName, KeyListIndicator, NetIndicator)) {
+      cerr << "ERROR: Key file " << KeyFileName << " not found." << endl;
+      exit (1);
+    };
+  }
+
+  // open the input and output file or use cin and cout
+  ifstream fin;
+  if (vm.count("fileIn")) {
+    fin.open(FileIn);
+    if (!fin) {
+      cerr << "m209: Unable to open input file " << FileIn << endl;
+      exit(1);
+    }
+  }
+  istream& in = (vm.count("fileIn")) ? fin : cin;
+  ofstream fout;
+  if (vm.count("fileOut")) {
+    fout.open(FileOut);
+    if (!fout) {
+      cerr << "m209: Unable to open output file " << FileOut << endl;
+      exit(1);
+    }
+  }
+  ostream& out = (vm.count("fileOut")) ? fout : cout;
+
   if (vm.count("-p")) {
-    m209.PrintKey(KeyListIndicator, NetIndicator);
+    if (AutoKey) {
+      date now = day_clock::universal_day();
+      if (!m209.LoadKey(now, KeyListIndicator, NetIndicator)) {
+        cerr << "ERROR: Unable to load key from data base" << endl;
+        exit(1);
+      }
+
+    }
+    m209.PrintKey(KeyListIndicator, NetIndicator, out);
   }
   
   if (Verbose) {
@@ -237,9 +250,9 @@ int main(int argc, char **argv)
     << " for random number generation."
     << endl;
   }
-  
+
   if (DoCipher) {
-    if (!AutoIndicator) {
+    if (!AutoMsgIndicator) {
       if (!m209.SetWheels(indicator)) {
         cerr << "ERROR: Invalid wheel position(s) specified"
         << endl;
@@ -257,20 +270,21 @@ int main(int argc, char **argv)
       }
       char c;
       for (int n = 0; n< SkipChars; ) {
-        if (!cin.good()) {
+        if (!in.good()) {
           break;
         }
-        c = cin.get();
+        c = in.get();
         if (!isspace(c)) {
           ++n;
         }
       }
     }
    
-    m209.CipherStream(AutoIndicator,
+    m209.CipherStream(AutoKey,
+                      AutoMsgIndicator,
                       KeyListIndicator,
                       NetIndicator,
-                      KeyDir, CipherMode, cin, cout);
+                      KeyDir, CipherMode, in, out);
   }
   
   return 0;

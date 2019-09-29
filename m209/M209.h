@@ -29,11 +29,15 @@
 
 #include <bitset>
 using std::bitset;
+#include <boost/date_time/gregorian/gregorian.hpp>
+using namespace boost::gregorian;
+
 #include "Keywheel.h"
 
 #include <iostream>
 #include <vector>
 #include <array>
+
 
 
 //! Number of pin wheels.
@@ -73,6 +77,9 @@ struct ScoredDrum {
 //! This class simulates an M209 series cipher machine.
 //
 class M209 {
+public:
+  
+  typedef array<bitset<NUM_WHEELS>, NUM_LUG_BARS> DrumType;
   
 private:
   
@@ -82,7 +89,7 @@ private:
   
   //! Array of NUM_LUG_BARS lug bars, each defined by NUM_WHEELS bits.
   //
-  array<bitset <NUM_WHEELS>, NUM_LUG_BARS >  Drum;
+  DrumType  Drum;
   
   //! Letter counter (a 4-digit counter in a real machine).
   //
@@ -124,7 +131,7 @@ public:
   void PrintKey(string KeyListIndicator, string NetIndicator,
                 ostream& os = cout);
   
-  array<bitset<NUM_WHEELS>, NUM_LUG_BARS> getDrum() { return Drum;}
+  DrumType getDrum() { return Drum;}
   //! Load key from file.
   //
   bool LoadKey(const string& fname);
@@ -135,6 +142,8 @@ public:
   /// Load key for an istream using designated KeyListIndicator and NetIndicator
   void LoadKey(istream& keyfile, string&KeyListIndicator, string& NetIndicator);
   
+  /// Load key from keylist data base
+  bool LoadKey(date d, string& KeyListIndicator, string& NetIndicator);
   
   /// Generaate a random key using mehtod in Appendices of 1944 Technical Manual
   void GenKey1944(void);
@@ -145,7 +154,7 @@ public:
                      vector<array<int, 6> >& NumArrayB);
   
   /// Validate that a proposed drum satisfies the sum condition
-  bool ValidateDrum(array<bitset<NUM_WHEELS>, NUM_LUG_BARS> drum);
+  bool ValidateDrum(DrumType drum);
   
   /// Geneate a list of all of the drums that are consistem with NumArray
   /// and which satisfy the sum dest
@@ -168,7 +177,8 @@ public:
   
   //! Encipher/Decipher a stream, exit() on EOF.
   //
-  void CipherStream(bool AutoIndicator,
+  void CipherStream(bool AutoKey,
+                    bool AutoMsgIndicator,
                     string& KeyListIndicator,
                     string& NetIndicator,
                     string KeyDir, bool CipherMode,

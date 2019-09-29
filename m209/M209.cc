@@ -39,6 +39,7 @@ using std::ifstream;
 
 #include "config.h"
 #include "M209.h"
+#include "KeyListDataBase.hpp"
 
 //! Array of position names for each of the six key wheels.
 //
@@ -256,6 +257,24 @@ bool M209::LoadKey(const string& fname) {
   
   return LoadKey(fname, dummy1, dummy2);
 }
+
+bool M209::LoadKey(date d, string& KeyListIndicator, string& NetIndicator) {
+  string root_dir = getenv("M209_KEYLIST_DIR");
+  if (root_dir.back() != '/')
+    root_dir += "/";
+  string d_str = to_simple_string(d);
+  string y_str = d_str.substr(0,4);
+  string m_str = d_str.substr(5,3);
+  boost::to_upper(m_str);
+  KeyListIndicator = Date2KeyListIndicator(NetIndicator, d);
+  string key_file = NetIndicator + "-" + y_str + "/" + m_str + "/keys/" + KeyListIndicator + ".txt";
+  bool ret = LoadKey(root_dir + key_file);
+  if (!ret) {
+    cerr << "Could not load key from file " << (root_dir + key_file) << endl;
+  }
+  return ret;
+}
+
 
 bool M209::LoadKey(const string& fname, string& KeyListIndicator, string &NetIndicator) {
 
@@ -580,7 +599,8 @@ bool M209::SetWheels(vector<string> indicator) {
 
 
 
-void M209::CipherStream(bool AutoIndicator,
+void M209::CipherStream(bool AutoKey,
+                        bool AutoMsgIndicator,
                         string& KeyListIndicator,
                         string& NetIndicator,
                         string KeyDir,
@@ -628,11 +648,11 @@ void M209::CipherStream(bool AutoIndicator,
   // regexp matching net indicator and group count in ciphertext.
   // Tolerate some variation in the "GR" text.
   netind_regex = "[\\s]*"       // optional leading whitespace
-  "[A-Z0-9]+"         // net indicator
+  "([A-Z0-9]+)"         // net indicator
   "[\\s]+"         // whitespace
-  "GR(P|PS|OUP|OUPS)?"       // GR, GRP, GRPS, GROUP or GROUPS
+  "(GR(P|PS|OUP|OUPS)?)"       // GR, GRP, GRPS, GROUP or GROUPS
   "[\\s]+"         // whitespace
-  "[0-9]+"         // group count
+  "([0-9]+)"         // group count
   "[\\s]*";         // optional trailing whitespace
   
   // Read entire input message into buffer. If we are deciphering
@@ -654,9 +674,16 @@ void M209::CipherStream(bool AutoIndicator,
     // line found.
     if (!CipherMode && !FoundNetInd) {
       if (std::regex_match(line, matches, netind_regex)) {
-        // Line looks like a net indicator line. Discard it.
-        if (Verbose) {
-          cerr << "discarding net indicator line \"" << line << "\"" << endl;
+        // Line looks like a net indicator line.
+        if (AutoKey) {
+          NetIndicator = matches[1].str();
+          if (Verbose) {
+            cerr << "Using NetIndicator \"" << NetIndicator << "\" from cipher text" << endl;
+          }
+        } else {
+          if (Verbose) {
+            cerr << "Discarding net indicator line \"" << line << "\"" << endl;
+          }
         }
         FoundNetInd = true;
         continue;
@@ -682,7 +709,7 @@ void M209::CipherStream(bool AutoIndicator,
   }
   
   // Are we automatically setting message indicators?
-  if (AutoIndicator) {
+  if (AutoMsgIndicator) {
     
     if (CipherMode) {
       // Must generate random indicator, encipher it, and include it
@@ -693,7 +720,16 @@ void M209::CipherStream(bool AutoIndicator,
       // repeat system indicator in place of key list indicator.
       
       
-      if (KeyListIndicator.length() == 2) {
+      if (AutoKey) {
+        date now = day_clock::universal_day();
+        if (!LoadKey(now, KeyListIndicator, NetIndicator)) {
+          cerr << "ERROR: Unable to load key data base " << endl;
+          exit(1);
+          
+        }
+        MyKLI = KeyListIndicator;
+                        
+      } else {
         MyKLI = KeyListIndicator;
         
         string Keyfile1 = KeyDir + "/" + MyKLI + KEYFILE_SUFFIX1;
@@ -702,11 +738,11 @@ void M209::CipherStream(bool AutoIndicator,
         if (LoadKey(Keyfile1, KeyListIndicator, NetIndicator)) {
         } else if (LoadKey(Keyfile2, KeyListIndicator, NetIndicator)) {
         } else if (!Quiet) {
-          cerr << "Key file not found; using current key settings."
-          << endl;
+          cerr << "ERROR: Key file not found." << endl;
+          exit(1);
         }
       }
-      
+
       // Generate random internal and external message indicators
       tries = 0;
       do {
@@ -772,7 +808,7 @@ void M209::CipherStream(bool AutoIndicator,
           OutBuf << ' ';
         }
       }
-      OutBuf << MyKLI << ' ';
+      OutBuf << KeyListIndicator << ' ';
       
       
       
@@ -827,18 +863,25 @@ void M209::CipherStream(bool AutoIndicator,
       i += 2;
       MyKLI.push_back(MsgInd1[i++]);
       MyKLI.push_back(MsgInd1[i++]);
-      
-      
-      // See if corresponding key file exists
-      // Try .txt extension first, then .m209key if not found.
-      string Keyfile1 = KeyDir + "/" + MyKLI + KEYFILE_SUFFIX1;
-      string Keyfile2 = KeyDir + "/" + MyKLI + KEYFILE_SUFFIX2;
+      if (AutoKey) {
+        date d = KeyListIndicator2Date(NetIndicator, MyKLI);
+        if (!LoadKey(d, KeyListIndicator, NetIndicator)) {
+          cerr << "ERROR: Unable to load key from data base" << endl;
+          exit(1);
+        }
+      } else {
+        // See if corresponding key file exists
+        // Try .txt extension first, then .m209key if not found.
+        string Keyfile1 = KeyDir + "/" + MyKLI + KEYFILE_SUFFIX1;
+        string Keyfile2 = KeyDir + "/" + MyKLI + KEYFILE_SUFFIX2;
 
-      if (LoadKey(Keyfile1)) {
-      } else if (LoadKey(Keyfile2)) {
-      } else  if (!Quiet) {
-        cerr << "Key file not found; using current key settings."
-        << endl;
+        if (LoadKey(Keyfile1)) {
+        } else if (LoadKey(Keyfile2)) {
+        } else {
+          cerr << "ERROR: Key file not found." << endl;
+          exit(1);
+        }
+
       }
       
       // Generate internal message indicator
@@ -860,7 +903,7 @@ void M209::CipherStream(bool AutoIndicator,
         exit(1);
       }
     }
-  } // if AutoIndicator
+  } // if AutoMsgIndicator
   
   while (!MsgText.empty()) {
     InC = MsgText.front();
@@ -882,7 +925,7 @@ void M209::CipherStream(bool AutoIndicator,
       
       // Break line every 25 letters, also counting the initial 10 letter
       // message indicator when appropriate.
-      if (((LetterCounter + ((AutoIndicator && CipherMode)?10:0)) % 25) == 0) {
+      if (((LetterCounter + ((AutoMsgIndicator && CipherMode)?10:0)) % 25) == 0) {
         OutBuf << endl;
       } else {
         OutBuf << ' ';
@@ -890,7 +933,7 @@ void M209::CipherStream(bool AutoIndicator,
     }
   }
   
-  if (AutoIndicator && CipherMode) {
+  if (AutoMsgIndicator && CipherMode) {
     
     // Pad out message if necessary with unenciphered 'X's
     if (LetterCounter % 5) {

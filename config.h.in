@@ -1,6 +1,11 @@
 
-/* Version number of package */
+/* Information from the build system */
+#define PACKAGE_NAME "@PACKAGE_NAME@"
 #define VERSION "@PACKAGE_VERSION@"
+#define PACKAGE_COMPILER "@PACKAGE_COMPILER@"
+#define PACKAGE_COMPILER_VERSION "@PACKAGE_COMPILER_VERSION@"
+#define PACKAGE_OS "@PACKAGE_OS@"
+#define PACKAGE_BOOST_VERSION "@BOOST_VERSION@"
 
 #include <random>
 #ifdef SOURCE

@@ -1,12 +1,32 @@
 //
-//  M209Group.cpp
-//  check_keylists
+/// \file KeyListDataBase.cpp
+/// \package hagelin
 //
-//  Created by Joseph Dunn on 9/23/19.
-//  Copyright © 2019 Joseph Dunn. All rights reserved.
+/// \author Joseph Dunn on 9/23/19.
+/// \copyright © 2019 Joseph Dunn. 
 //
 
-#include "M209Group.hpp"
+/**************************************************************************
+* Copyright (C) 2019 Joseph Dunn
+* Copyright (C) 2009-2013 Mark J. Blair, NF6X
+*
+* This file is part of Hagelin.
+*
+*  Hagelin is free software: you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  Hagelin is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with Hagelin.  If not, see <http://www.gnu.org/licenses/>.
+**************************************************************************/
+
+#include "KeyListDataBase.hpp"
 
 /// Returns days since 1/1/01.  Replicated Python
 int toordinal(date d) {
@@ -33,7 +53,7 @@ date KeyListIndicator2Date(string NetIndicator, string KeyListIndicator) {
   int IndicatorNum = toordinal(now);
   for (int i=0; i<NetIndicator.size(); ++i)
     IndicatorNum += NetIndicator[i];
-  IndicatorNum = IndicatorNum % 26;
+  IndicatorNum = IndicatorNum % 676;
   int IndicatorNumKL = 26 * (KeyListIndicator[0]-'A') + KeyListIndicator[1]-'A';
   // adj is the # of days from kl date to present date
   int adj = IndicatorNum-IndicatorNumKL;
@@ -41,9 +61,9 @@ date KeyListIndicator2Date(string NetIndicator, string KeyListIndicator) {
   return now - days(adj);
 }
 
-string M209GroupKeyFile (string NetIndicator,
+string KeyListDataBaseKeyFile (string NetIndicator,
                          string KeyListIndicator) {
-  string root_dir = "../../m209group-key-lists/";
+  string root_dir = getenv("M209_KEYLIST_DIR");
   date d = KeyListIndicator2Date(NetIndicator, KeyListIndicator);
   string d_str = to_simple_string(d);
   string y_str = d_str.substr(0,4);

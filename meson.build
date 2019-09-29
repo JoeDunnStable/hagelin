@@ -1,5 +1,5 @@
 project('Hagelin', 'cpp', default_options : ['cpp_std=c++11'],
-        version : '2019-09-24', license : 'GPL v3')
+        version : '2019-09-28', license : 'GPL v3')
 
 compiler=meson.get_compiler('cpp').get_id()
 
@@ -33,11 +33,11 @@ hagelin_config_h = configure_file(input : 'config.h.in',
 				  configuration : hagelin_config,
 				  install : false)
 
-incdir=include_directories(['.', 'm209','M209Group'])
+incdir=include_directories(['.', 'm209','KeyListDataBase'])
 
 subdir('doc')
 subdir('m209')
 subdir('python')
 subdir('tests')
-subdir('M209Group')
+subdir('KeyListDataBase')
 subdir('Check_KeyLists')

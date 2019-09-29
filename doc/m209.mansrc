@@ -35,9 +35,9 @@ m209 \- simulate the M-209 Converter
 .RB [ \-s
 .IR n ]
 .br
-.B <
+.B \-\-fileIn
 .I InFile
-.B >
+.B \-\-fileOut
 .I OutFile
 .br
 .HP
@@ -55,9 +55,23 @@ m209 \- simulate the M-209 Converter
 .IR NetIndicator ]
 .RB [ \-t
 .IR KeyFileDir ]
-.B <
+.B \-\-fileIn
 .I InFile
-.B >
+.B \-\-fileOut
+.I OutFile
+.br
+.HP
+.B m209
+.RB [ \-v ]
+.RB [ \-q ]
+.BR \-c | \-d
+.B \-A
+.RB [ \-n
+.IR NetIndicator ]
+.br
+.B \-\-fileIn
+.I InFile
+.B \-\-fileOut
 .I OutFile
 .br
 .HP
@@ -69,7 +83,7 @@ m209 \- simulate the M-209 Converter
 .IR KeyListIndicator ]
 .RB [ \-n
 .IR NetIndicator ]
-.B >
+.B \-\-fileOut
 .I KeyFile
 .
 .SH DESCRIPTION
@@ -105,6 +119,23 @@ context.
 .
 .SH OPTIONS
 .
+.TP
+.B \-A
+Automatically retrieve the key from the database rooted in the directory
+specified by the M209_KEYLIST_DIR environmental variable.  When used in cipher mode
+.RB (\-c )
+the key is retrieved based on today's date and the NetIndicator specified by the
+.RB \-n
+option defaulting to "M209GROUP" if NetIndicator is unspecified. When used in
+the decipher mode
+.RB ( \-d )
+the NetIndicator and KeyListIndicator embedded in the cipher text
+are used.  The
+.RB \-A
+option implies that the message indicator is automatically generated
+as it would be using the
+.RB \-a
+option.
 .TP
 .B \-a
 Automatically generate or extract message indicators in cipher
@@ -195,7 +226,6 @@ two-character alphabetic string.
 .TP
 .B \-p
 Print key setting to stdout.
-.
 The resulting output may be redirected to a file, and is suitable for
 loading into
 .B m209
@@ -226,6 +256,18 @@ leading characters in input stream. Useful to skip message indicators
 in formats which are not supported by the
 .B \-a
 option.
+.
+.TP
+.BI \-\-fileIn " InFile"
+Use file
+.I InFile
+for input.  Use stdin otherwise.
+.
+.TP
+.BI \-\-fileOut " OutFile"
+Use file
+.I OutFile
+for output.  Use stdout otherwise.
 .
 .TP
 .B \-v
@@ -368,6 +410,7 @@ http://en.wikipedia.org/wiki/M-209
 .SH COPYRIGHT
 .
 .PP
+Copyright (C) 2019 Joseph Dunn
 Copyright (C) 2009-2013 Mark J. Blair
 .PP
 m209 is part of the Hagelin project.

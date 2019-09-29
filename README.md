@@ -39,7 +39,7 @@ The following steps will build the system, starting in the source directory
 The package includes a boost test executable, which can be invoked as 
 follows:
 
-    ninja check
+    ninja -j 1 test
     
 The program was developed an OS X using Apple's clang++ compiler and it's
 now been ported to the following:
@@ -58,7 +58,7 @@ the M209GROUP.  These list are available for download at:
 Mark also developed a method for translating a NetIndicator together with a date
 into a two letter KeyListIndicator.  Mark's python program m209-indicator.py implements
 this procedure for the current date.  A program which accepts both a NetIndicator and 
-arbitrary date is contained in the M209Group subdirectory.
+arbitrary date is contained in the KeyListDataBase subdirectory.
 
 DOCUMENTATION
 
