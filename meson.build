@@ -1,5 +1,5 @@
 project('Hagelin', 'cpp', default_options : ['cpp_std=c++11'],
-        version : '2019-09-28', license : 'GPL v3')
+        version : '2019-10-17', license : 'GPL v3')
 
 compiler=meson.get_compiler('cpp').get_id()
 
@@ -18,7 +18,11 @@ if compiler == 'msvc'
 endif
 
 #Boost header and some libraries.
-boostdep = dependency('boost', modules : ['program_options','date_time'],  required : true)
+boostdep = dependency('boost',
+                      modules : ['program_options',
+			         'date_time',
+				 'filesystem',
+				  'system'],  required : true)
 
 hagelin_config = configuration_data()
 hagelin_config.set('PACKAGE_NAME', meson.project_name())
@@ -33,11 +37,13 @@ hagelin_config_h = configure_file(input : 'config.h.in',
 				  configuration : hagelin_config,
 				  install : false)
 
-incdir=include_directories(['.', 'm209','KeyListDataBase'])
+incdir=include_directories(['.', 'm209','KeyListDataBase','c52'])
 
 subdir('doc')
 subdir('m209')
 subdir('python')
-subdir('tests')
+subdir('test_m209')
 subdir('KeyListDataBase')
 subdir('Check_KeyLists')
+subdir('c52')
+subdir('test_c52')

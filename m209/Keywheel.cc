@@ -42,6 +42,13 @@ Keywheel::Keywheel() {
   WheelSize = Position = ReadOffset = 0;
 }
 
+void Keywheel::Clear() {
+  WheelSize = Position = ReadOffset = 0;
+  Pins.clear();
+  PosNames.clear();
+  PosByName.clear();  
+}
+
 
 void Keywheel::AddPosition(const string& name) {
   if (PosByName.count(name)) {

@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>C52CreateDataBase.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>5</integer>
+		</dict>
 		<key>Check_KeyLists.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -14,6 +19,11 @@
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
+		<key>c52.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
 		<key>hegelin.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -23,6 +33,11 @@
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+		<key>test_c52.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>6</integer>
 		</dict>
 		<key>test_m209.xcscheme_^#shared#^_</key>
 		<dict>
@@ -37,12 +52,27 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>6F530E2E235904B2008BECA2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>6F69CFD72329FDB300696078</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>6F8FE286232EC068000489D3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6F9815FC23426F8D00101777</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6FCD5269235697AA00366358</key>
 		<dict>
 			<key>primary</key>
 			<true/>

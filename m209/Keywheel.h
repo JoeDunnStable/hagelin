@@ -91,7 +91,9 @@ public:
     //
     ~Keywheel() {}
 
-
+    /// Clear the wheel
+    void Clear();
+  
     //! Add position to wheel with specified name (name must be unique).
     //
     void AddPosition(const string& name);

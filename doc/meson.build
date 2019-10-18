@@ -5,7 +5,8 @@ if(doxygen.found())
                  meson.source_root()+'/m209/m209_main.cc', \
 		 meson.source_root()+'/m209/M209.h', \
 		 meson.source_root()+'/m209/Keywheel.h',
-     meson.source_root()+'/KeyListDataBase/KeyListDataBase.hpp'  ]
+     meson.source_root()+'/KeyListDataBase/KeyListDataBase.hpp',
+     meson.source_root()+'/c52/C52.hpp'  ]
 
 	doc_config = configuration_data()
 	doc_config.set('PACKAGE_NAME', meson.project_name())
