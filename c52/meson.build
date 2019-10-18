@@ -47,7 +47,8 @@ test('test_c52_A_c_n_fail', c52,
      should_fail: true)
 test('test_c52_g_p', c52,
      args: ['-g', '-p', '-n', 'MYTEST',
-            '--fileOut', meson.build_root()+'/tests/newkey_c52.txt'])
+            '--fileOut', meson.build_root()+'/tests/newkey_c52.txt'],
+     timeout: 1000)
 test('test_c52_a_c_l', c52,
      args: ['-a', '-c', '-t', meson.source_root()+'/tests',
             '-l', '20191015',

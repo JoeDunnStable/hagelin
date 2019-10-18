@@ -12,4 +12,5 @@ test_c52 = executable('test_c52', src,
 
 test('test_c52', test_c52,
       env: ['C52_KEYLIST_DIR='+meson.source_root()+'/data/',
-            'MESON_SOURCE_ROOT='+meson.source_root()])
+            'MESON_SOURCE_ROOT='+meson.source_root()],
+      timeout : 1000)

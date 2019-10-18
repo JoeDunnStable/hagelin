@@ -68,7 +68,7 @@ vector<array<int,NUM_WHEELS> > C52::NumArrayB;
 
 /// Validate that a proposed drum satisfies the sum requirement
 bool C52::ValidateDrum(DrumType drum) {
-  bitset<NUM_LUG_BARS-NUM_WHEELS> Sums(0);
+  bitset<NUM_LUG_BARS-NUM_WHEELS+2> Sums(0);
   for (size_t i=0; i< pow(2,NUM_WHEELS); ++i) {
     bitset<NUM_WHEELS> pins(i);
     int sum = 0;
