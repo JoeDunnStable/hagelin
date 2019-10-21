@@ -1,5 +1,5 @@
 project('Hagelin', 'cpp', default_options : ['cpp_std=c++11'],
-        version : '2019-10-17', license : 'GPL v3')
+        version : '2019-10-21', license : 'GPL v3')
 
 compiler=meson.get_compiler('cpp').get_id()
 

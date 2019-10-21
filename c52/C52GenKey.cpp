@@ -230,7 +230,7 @@ C52::GoodDrums(array<int, NUM_WHEELS> NumArray, int& tries) {
 
 /// Generate a key using the method descibed in the Appendices of the
 /// 1944 Technical Manual
-void C52::GenKey() {
+void C52::GenKey(bool CX52) {
   /*
    Per Technical Manual Appendix I 1b
    Oreoare as set if 156 lettered cards, 78 of which are marked R (right)
@@ -247,13 +247,17 @@ void C52::GenKey() {
   if (NumArrayA.size()==0) {
     GenNumArrays();
   }
-  /* Unlike the M209 we have to select the wheels for a C52 from
-   a list of 12 possibilities.
-   */
   array<size_t, 12> wheel_idx;
-  iota(wheel_idx.begin(), wheel_idx.end(), 0);
-  shuffle(wheel_idx.begin(), wheel_idx.end(), gen);
-  
+  if (CX52) {
+    for (int i=0; i<NUM_WHEELS; ++i)
+      wheel_idx.at(i) = 11;  // the whell with 47 positions
+  } else {
+    /* Unlike the M209 we have to select the wheels for a C52 from
+     a list of 12 possibilities.
+     */
+    iota(wheel_idx.begin(), wheel_idx.end(), 0);
+    shuffle(wheel_idx.begin(), wheel_idx.end(), gen);
+  }
   for (int i=0; i<NUM_WHEELS; ++i){
     Wheels.at(i).Clear();
     for (auto a : wheel_labels.at(wheel_idx.at(i))) {

@@ -65,6 +65,7 @@ int main(int argc, const char * argv[]) {
   using namespace boost::program_options;
   C52     c52;
   string  DataDir, NetIndicator, StartDate_str, EndDate_str;
+  bool CX52 = false;
 
   // Parse command-line arguments
   options_description desc("C52 options description");
@@ -73,6 +74,7 @@ int main(int argc, const char * argv[]) {
   ("version,V", "print version and copyright")
   (",d", value<string>(&DataDir), "the root directory of key databases")
   (",n", value<string>(&NetIndicator), "Specify a net indicator.\nMust be a single word consisting of only letters and/or numbers.")
+  (",x",  bool_switch(&CX52), "Generate keys for CX52")
   (",s", value<string>(&StartDate_str), "the start date for the database in ISO format")
   (",e", value<string>(&EndDate_str), "the end date for the database in ISO format")
   (",v", bool_switch(&Verbose), "Print verbose debug messages to stderr.");
@@ -116,7 +118,7 @@ int main(int argc, const char * argv[]) {
       cout << "Writing to file: " << (p / fname) << endl;
 
     }
-    c52.GenKey();
+    c52.GenKey(CX52);
     c52.PrintKey(NetIndicator, *d_itr, fout);
   }
 

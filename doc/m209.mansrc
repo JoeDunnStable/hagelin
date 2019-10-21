@@ -16,7 +16,7 @@
 .\"   You should have received a copy of the GNU General Public License
 .\"   along with Hagelin.  If not, see <http://www.gnu.org/licenses/>.
 .\" **************************************************************************
-.TH m209 1 "" "Version !VERSION!" "USER COMMANDS"
+.TH m209 1 "" "Version @VERSION@" "USER COMMANDS"
 .
 .SH NAME
 m209 \- simulate the M-209 Converter
@@ -35,10 +35,10 @@ m209 \- simulate the M-209 Converter
 .RB [ \-s
 .IR n ]
 .br
-.B \-\-fileIn
-.I InFile
-.B \-\-fileOut
-.I OutFile
+.RB [ \-\-fileIn
+.IR InFile ]
+.RB [ ]\-\-fileOut
+.IR OutFile ]
 .br
 .HP
 .B m209
@@ -55,10 +55,11 @@ m209 \- simulate the M-209 Converter
 .IR NetIndicator ]
 .RB [ \-t
 .IR KeyFileDir ]
-.B \-\-fileIn
-.I InFile
-.B \-\-fileOut
-.I OutFile
+.br
+.RB [ \-\-fileIn
+.IR InFile ]
+.RB [ \-\-fileOut
+.IR OutFile ]
 .br
 .HP
 .B m209
@@ -69,10 +70,10 @@ m209 \- simulate the M-209 Converter
 .RB [ \-n
 .IR NetIndicator ]
 .br
-.B \-\-fileIn
-.I InFile
-.B \-\-fileOut
-.I OutFile
+.RB [ \-\-fileIn
+.IR InFile ]
+.RB [ \-\-fileOut
+.IR OutFile ]
 .br
 .HP
 .B m209
@@ -83,8 +84,9 @@ m209 \- simulate the M-209 Converter
 .IR KeyListIndicator ]
 .RB [ \-n
 .IR NetIndicator ]
-.B \-\-fileOut
-.I KeyFile
+.br
+.RB [ \-\-fileOut
+.IR KeyFile ]
 .
 .SH DESCRIPTION
 .B m209
@@ -397,7 +399,11 @@ m209 -c -k AB.txt -i a b c d e f <plain.txt >cipher.txt
 .SH UPDATES
 .
 .PP
-The hagelin project is hosted at GitLab:
+Joe Dunn's update of the hagelin project is hosted at:
+.br
+https://github.com/JoeDunnStable/hagelin.git
+.PP
+Mark Blair's hagelin project is hosted at GitLab:
 .br
 https://gitlab.com/NF6X_Crypto/hagelin
 .
@@ -411,6 +417,7 @@ http://en.wikipedia.org/wiki/M-209
 .
 .PP
 Copyright (C) 2019 Joseph Dunn
+.br
 Copyright (C) 2009-2013 Mark J. Blair
 .PP
 m209 is part of the Hagelin project.
@@ -431,9 +438,11 @@ along with Hagelin.
 .
 If not, see <http://www.gnu.org/licenses/>.
 .
-.SH AUTHOR
+.SH AUTHORS
 .
 .PP
+Joseph Dunn, <JoeDunn144@gmail.com>
+.br
 Mark J. Blair, NF6X <nf6x@nf6x.net>
 .br
 http://www.nf6x.net

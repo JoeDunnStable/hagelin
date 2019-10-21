@@ -6,7 +6,8 @@ if(doxygen.found())
 		 meson.source_root()+'/m209/M209.h', \
 		 meson.source_root()+'/m209/Keywheel.h',
      meson.source_root()+'/KeyListDataBase/KeyListDataBase.hpp',
-     meson.source_root()+'/c52/C52.hpp'  ]
+     meson.source_root()+'/c52/C52.hpp',
+     meson.source_root()+'/c52/C52Keywheel.hpp'  ]
 
 	doc_config = configuration_data()
 	doc_config.set('PACKAGE_NAME', meson.project_name())
@@ -39,5 +40,9 @@ hagelin_man =configure_file(input :  'hagelin.mansrc',
 m209_man = configure_file(input :  'm209.mansrc',
 	                        output : 'm209.1',
 	                        configuration : man_config)
+
+c52_man = configure_file(input :  'c52.mansrc',
+                         output : 'c52.1',
+                         configuration : man_config)
 
 install_man([hagelin_man, m209_man])

@@ -53,7 +53,7 @@ using std::regex_match;
 #include <config.h>
 #include "C52.hpp"
 
-int mod(int a, int b) {
+inline int mod(int a, int b) {
   int ret = a % b;
   if (ret<0)
     ret += b;

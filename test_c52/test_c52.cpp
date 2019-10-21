@@ -55,16 +55,19 @@ BOOST_AUTO_TEST_CASE(test_construction){
   BOOST_TEST(true);
 }
 
+
 BOOST_AUTO_TEST_CASE(cipher_test){
   string src_dir(getenv("MESON_SOURCE_ROOT"));
   C52 c52;
   bool AutoKey = false;
-  bool AutoMsgIndicator = true;
+  bool AutoMsgIndicator = false;
   date d = date_from_iso_string("20191015");
+  string fname = src_dir + "/tests/20191015.c52key";
   string NetIndicator = "";
-  string KeyDir = src_dir + "/tests";
+  c52.LoadKey(fname, NetIndicator, d);
+  string KeyDir = ".";
   bool CipherMode = false;
-  ifstream in(src_dir + "/tests/cipher_c52_AutoMsg.txt");
+  ifstream in(src_dir + "/tests/cipher2_c52.txt");
   if (in) {
     stringstream out;
     
@@ -186,6 +189,45 @@ BOOST_AUTO_TEST_CASE(auto_key_test){
   bool AutoKey = true;
   bool AutoMsgIndicator = true;
   string NetIndicator = "C52NET";
+  date d;
+  bool CipherMode = true;
+  string KeyDir = ".";
+  stringstream plain_text("HELLO WORLD");
+  stringstream cipher_text;
+  
+  c52.CipherStream(AutoKey,
+                    AutoMsgIndicator,
+                    d,
+                    NetIndicator,
+                    KeyDir, CipherMode, plain_text, cipher_text);
+  
+  c52.ClearKey();
+  CipherMode = false;
+  stringstream deciphered_text;
+  
+  c52.CipherStream(AutoKey,
+                    AutoMsgIndicator,
+                    d,
+                    NetIndicator,
+                    KeyDir, CipherMode, cipher_text, deciphered_text);
+  
+  plain_text.seekg(0);
+  bool f_okay = true;
+  char c1;
+  while (plain_text >> c1) {
+    char c2;
+    deciphered_text >> c2;
+    if (c1 != c2)
+      f_okay = false;
+  }
+  BOOST_TEST(f_okay);
+}
+
+BOOST_AUTO_TEST_CASE(cx52_auto_key_test){
+  C52 c52;
+  bool AutoKey = true;
+  bool AutoMsgIndicator = true;
+  string NetIndicator = "CX52NET";
   date d;
   bool CipherMode = true;
   string KeyDir = ".";

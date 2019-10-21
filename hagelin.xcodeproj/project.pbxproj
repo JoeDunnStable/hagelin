@@ -18,6 +18,9 @@
 		6F530E3623590B94008BECA2 /* C52.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F98160423426FFA00101777 /* C52.cpp */; };
 		6F530E3723590B9D008BECA2 /* C52GenKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F9816072344392A00101777 /* C52GenKey.cpp */; };
 		6F530E3823590BB4008BECA2 /* Keywheel.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6F69CFE5232A00F300696078 /* Keywheel.cc */; };
+		6F5C5D01235AD67400032CD4 /* C52Keywheel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5C5CFF235AD67400032CD4 /* C52Keywheel.cpp */; };
+		6F5C5D02235B87AA00032CD4 /* C52Keywheel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5C5CFF235AD67400032CD4 /* C52Keywheel.cpp */; };
+		6F5C5D03235BA9E700032CD4 /* C52Keywheel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F5C5CFF235AD67400032CD4 /* C52Keywheel.cpp */; };
 		6F69CFE6232A00F300696078 /* m209_main.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6F69CFE2232A00F300696078 /* m209_main.cc */; };
 		6F69CFE7232A00F300696078 /* M209GenKey.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6F69CFE3232A00F300696078 /* M209GenKey.cc */; };
 		6F69CFE8232A00F300696078 /* M209.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6F69CFE4232A00F300696078 /* M209.cc */; };
@@ -140,6 +143,8 @@
 		6F530E2F235904B2008BECA2 /* test_c52 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test_c52; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F530E31235904B2008BECA2 /* test_c52.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_c52.cpp; sourceTree = "<group>"; };
 		6F530E3923593AEE008BECA2 /* meson.build */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = meson.build; sourceTree = "<group>"; };
+		6F5C5CFF235AD67400032CD4 /* C52Keywheel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = C52Keywheel.cpp; sourceTree = "<group>"; };
+		6F5C5D00235AD67400032CD4 /* C52Keywheel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = C52Keywheel.hpp; sourceTree = "<group>"; };
 		6F69CFD82329FDB300696078 /* m209 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = m209; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F69CFE2232A00F300696078 /* m209_main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = m209_main.cc; sourceTree = "<group>"; };
 		6F69CFE3232A00F300696078 /* M209GenKey.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = M209GenKey.cc; sourceTree = "<group>"; };
@@ -158,6 +163,7 @@
 		6F98160423426FFA00101777 /* C52.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = C52.cpp; sourceTree = "<group>"; };
 		6F98160523426FFA00101777 /* C52.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = C52.hpp; sourceTree = "<group>"; };
 		6F9816072344392A00101777 /* C52GenKey.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = C52GenKey.cpp; sourceTree = "<group>"; };
+		6FC1B946235C19A9002C43D3 /* c52.mansrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = c52.mansrc; sourceTree = "<group>"; };
 		6FCD526A235697AA00366358 /* C52CreateDataBase */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = C52CreateDataBase; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FCD526C235697AA00366358 /* C52CreateDataBase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = C52CreateDataBase.cpp; sourceTree = "<group>"; };
 		6FE7BE5123345A720044053A /* AppendixII.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppendixII.cpp; sourceTree = "<group>"; };
@@ -260,6 +266,7 @@
 		6F43FCD7232D572B0098362F /* doc */ = {
 			isa = PBXGroup;
 			children = (
+				6FC1B946235C19A9002C43D3 /* c52.mansrc */,
 				6F43FCDB232D57D20098362F /* meson.build */,
 				6F43FCDA232D57B20098362F /* Doxyfile.in */,
 				6F43FCD9232D57B20098362F /* hagelin.mansrc */,
@@ -354,6 +361,8 @@
 				6F98160423426FFA00101777 /* C52.cpp */,
 				6F98160523426FFA00101777 /* C52.hpp */,
 				6F9816072344392A00101777 /* C52GenKey.cpp */,
+				6F5C5CFF235AD67400032CD4 /* C52Keywheel.cpp */,
+				6F5C5D00235AD67400032CD4 /* C52Keywheel.hpp */,
 			);
 			path = c52;
 			sourceTree = "<group>";
@@ -578,6 +587,7 @@
 				6F530E3823590BB4008BECA2 /* Keywheel.cc in Sources */,
 				6F530E3723590B9D008BECA2 /* C52GenKey.cpp in Sources */,
 				6F530E32235904B2008BECA2 /* test_c52.cpp in Sources */,
+				6F5C5D03235BA9E700032CD4 /* C52Keywheel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -615,6 +625,7 @@
 				6F981609234450ED00101777 /* Keywheel.cc in Sources */,
 				6F9816082344392A00101777 /* C52GenKey.cpp in Sources */,
 				6F98160023426F8D00101777 /* C52_main.cpp in Sources */,
+				6F5C5D01235AD67400032CD4 /* C52Keywheel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,6 +637,7 @@
 				6FCD52732356B19200366358 /* Keywheel.cc in Sources */,
 				6FCD52722356B0A300366358 /* C52GenKey.cpp in Sources */,
 				6FCD526D235697AA00366358 /* C52CreateDataBase.cpp in Sources */,
+				6F5C5D02235B87AA00032CD4 /* C52Keywheel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

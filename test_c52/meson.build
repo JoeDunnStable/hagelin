@@ -1,4 +1,5 @@
 src = ['../m209/Keywheel.cc',
+       '../c52/C52Keywheel.cpp',
        '../c52/C52.cpp',
        '../c52/C52GenKey.cpp',
        '../m209/Keywheel.h',

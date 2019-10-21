@@ -1,4 +1,5 @@
 src = ['../m209/Keywheel.cc',
+       '../C52/C52Keywheel.cpp',
        'C52.cpp',
        'C52GenKey.cpp',
        '../m209/Keywheel.h',
@@ -52,7 +53,8 @@ test('test_c52_g_p', c52,
 test('test_c52_a_c_l', c52,
      args: ['-a', '-c', '-t', meson.source_root()+'/tests',
             '-l', '20191015',
-            '--fileIn', meson.source_root()+'/tests/plain.txt'])
+            '--fileIn', meson.source_root()+'/tests/plain.txt',
+            '--fileOut',meson.build_root()+'/tests/cipher_c52_AutoMsg.txt'])
 test('test_c52_a_c_nol', c52,
      args: ['-a', '-c', '-t', meson.source_root()+'/tests',
             '--fileIn', meson.source_root()+'/tests/plain.txt'],

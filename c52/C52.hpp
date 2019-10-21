@@ -41,7 +41,7 @@ using std::bitset;
 #include <boost/date_time/gregorian/gregorian.hpp>
 using namespace boost::gregorian;
 
-#include "Keywheel.h"
+#include "C52Keywheel.hpp"
 
 #include <iostream>
 using std::cout;
@@ -69,7 +69,7 @@ extern bool Verbose;
 extern bool Quiet;
 
 
-/// q e4um or lug bars together iwth a score for their fit with Appendix II of the
+/// struct with lug bars together iwth a score for their fit with Appendix II of the
 /// Technical Manual
 struct ScoredDrum {
   array<bitset<NUM_WHEELS>, NUM_LUG_BARS> drum;
@@ -92,7 +92,7 @@ private:
   array<size_t, NUM_WHEELS> wheel_idx;
 
       //! Array of NUM_WHEELS key wheels.
-  array<Keywheel, NUM_WHEELS>      Wheels;
+  array<C52Keywheel, NUM_WHEELS>      Wheels;
   
   //! Array of NUM_LUG_BARS lug bars, each defined by NUM_WHEELS bits.
   //
@@ -142,6 +142,7 @@ public:
   //
   void PrintKey(const string& NetIndicator, date d, ostream& os = cout);
   
+  /// Return the Drum
   DrumType getDrum() { return Drum;}
   
   /// Load key from file using indicated KeyListIndicator and NetIndicator
@@ -154,7 +155,7 @@ public:
   void LoadKey(istream& keyfile, string& NetIndicator, date d);
   
   /// Generaate a random key
-  void GenKey(void);
+  void GenKey(bool CX52=false);
   
   //! Generate arrays similar to those in Appendix II of the 1944l
   /// Technical Manual
@@ -181,6 +182,7 @@ public:
   //
   bool SetWheels(vector<string> indicator);
   
+  /// Set the print offset
   void SetPrintOffset(int offset) {
     print_offset = offset;
   }

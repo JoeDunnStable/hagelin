@@ -16,7 +16,7 @@
 .\"   You should have received a copy of the GNU General Public License
 .\"   along with Hagelin.  If not, see <http://www.gnu.org/licenses/>.
 .\" **************************************************************************
-.TH hagelin 1 "" "Version !VERSION!" "USER COMMANDS"
+.TH hagelin 1 "" "Version @VERSION@" "USER COMMANDS"
 .
 .SH NAME
 hagelin \- suite of simulators for Hagelin cipher machines
@@ -29,12 +29,18 @@ designs of Boris Hagelin.
 .SH UPDATES
 .
 .PP
-The hagelin project is hosted at GitLab:
+Joe Dunn's update of the hagelin project is hosted at:
+.br
+https://github.com/JoeDunnStable/hagelin.git
+.br
+Mark Blair's hagelin project is hosted at GitLab:
 .br
 https://gitlab.com/NF6X_Crypto/hagelin
 .
 .SH SEE ALSO
 .
+c52(1)
+.br
 m209(1)
 .br
 http://www.nf6x.net/tag/hagelin
@@ -43,6 +49,8 @@ http://en.wikipedia.org/wiki/M-209
 .SH COPYRIGHT
 .
 .PP
+Copyright (C) 2019 Joseph Dunn
+.br
 Copyright (C) 2009-2013 Mark J. Blair
 .PP
 Hagelin is free software: you can redistribute it and/or modify
@@ -61,9 +69,11 @@ along with Hagelin.
 .
 If not, see <http://www.gnu.org/licenses/>.
 .
-.SH AUTHOR
+.SH AUTHORS
 .
 .PP
+Joseph Dunn, <JoeDunn144@gmail.com>
+.br
 Mark J. Blair, NF6X <nf6x@nf6x.net>
 .br
 http://www.nf6x.net

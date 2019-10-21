@@ -1,0 +1,486 @@
+.\" **************************************************************************
+.\"  Copyright (C) 2019 Joseph Dunn
+.\"
+.\"  This file is part of Hagelin
+.\"
+.\"   Hagelin is free software: you can redistribute it and/or modify
+.\"   it under the terms of the GNU General Public License as published by
+.\"   the Free Software Foundation, either version 3 of the License, or
+.\"   (at your option) any later version.
+.\"
+.\"   Hagelin is distributed in the hope that it will be useful,
+.\"   but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"   GNU General Public License for more details.
+.\"
+.\"   You should have received a copy of the GNU General Public License
+.\"   along with Hagelin.  If not, see <http://www.gnu.org/licenses/>.
+.\" **************************************************************************
+.TH c52 1 "" "Version @VERSION@" "USER COMMANDS"
+.
+.SH NAME
+c52 \- simulate the C-52 Cipher Machine
+.
+.SH SYNOPSIS
+.HP
+.B c52
+.RB [ \-v ]
+.RB [ \-q ]
+.BR \-c | \-d
+.RB [ \-k
+.IR KeyFile ]
+.RB [ \-i
+.I i1 i2 i3 i4 i5
+.IR i6 ]
+.RB [ \-s
+.IR n ]
+.br
+.RB [ \-\-fileIn
+.IR InFile ]
+.RB [ \-\-fileOut
+.IR OutFile ]
+.br
+.HP
+.B c52
+.RB [ \-v ]
+.RB [ \-q ]
+.BR \-c | \-d
+.B \-a
+.RB [ \-k
+.IR KeyFile ]
+.RB [ \-l
+.IR Date ]
+.br
+.RB [ \-n
+.IR NetIndicator ]
+.RB [ \-t
+.IR KeyFileDir ]
+.br
+.RB [ \-\-fileIn
+.IR InFile ]
+.RB [\-\-fileOut
+.IR OutFile ]
+.br
+.HP
+.B c52
+.RB [ \-v ]
+.RB [ \-q ]
+.BR \-c | \-d
+.B \-A
+.RB [ \-n
+.IR NetIndicator ]
+.br
+.RB [ \-\-fileIn
+.IR InFile ]
+.RB [ \-\-fileOut
+.IR OutFile ]
+.br
+.HP
+.B c52
+.RB [ \-v ]
+.RB [ \-q ]
+.B \-g \-p
+.RB [ \-x ]
+.RB [ \-l
+.IR Date ]
+.RB [ \-n
+.IR NetIndicator ]
+.br
+.RB [ \-\-fileOut
+.IR KeyFile ]
+.
+.SH DESCRIPTION
+.B c52
+simulates the operation of the C\-52 Cipher Machine, A cipher machine
+produced by Crypto AG and used by numerous countries.
+.
+This machine was designed by Swedish cryptographer Boris Hagelin, and
+shares its operating principles with various other cipher machines
+which are collectively referred to as "pin and lug" machines.
+.
+.PP
+In addition to simulating the operation of the C\-52 Cipher Machine,
+.B c52
+can also generate random key settings and automate certain
+tedious operating procedures.
+.PP
+The C-52 Cipher Machine only enciphers and deciphers the letters 'A'
+through 'Z'.
+.
+Numbers or punctuation must be spelled out.
+.
+When enciphering, the operator substitutes the letter 'X' where a
+space is desired.
+.
+When deciphering, the machine prints a space instead of the
+letter 'X', and the operator must infer any actual 'X' letters from
+context.
+.
+.SH OPTIONS
+.
+.TP
+.B \-A
+Automatically retrieve the key from the database rooted in the directory
+specified by the C52_KEYLIST_DIR environmental variable.  When used in cipher mode
+.RB (\-c )
+the key is retrieved based on today's date and the NetIndicator specified by the
+.RB \-n
+option defaulting to "C52NET" if NetIndicator is unspecified. When used in
+the decipher mode
+.RB ( \-d )
+the NetIndicator and Date embedded in the cipher text
+are used.  The
+.RB \-A
+option implies that the message indicator is automatically generated
+as it would be using the
+.RB \-a
+option.
+.TP
+.B \-a
+Automatically generate or extract message indicators in cipher
+.RB ( \-c )
+or decipher
+.RB ( \-d )
+modes, respectively.
+.br
+
+.br
+In cipher mode, if a Date (using an iso string) is
+specified with the
+.B \-l
+option,
+.B c52
+will automatically try to load a key file named
+.IR Date.c52key
+in the directory specified with the
+.B \-t
+option. If a net indicator is either specified with the
+.B \-n
+option or is found in the key file, then a line will be added 
+to the beginning of the ciphertext containing the net indicator,
+text, the date, " GR ", and the group count of the ciphertext.
+.
+Message indicators will be included in the ciphertext using the
+protocol specified for Dirk Rijmenants BC-52 Simulator,
+
+http://users.telenet.be/d.rijmenants/en/bc-52.htm,
+
+and initial key wheel settings will be randomly generated.
+
+.br
+
+.br
+In decipher mode,
+.B c52
+expects to find valid message indicators in the ciphertext, and will
+automatically extract the initial key wheel settings.
+.
+The date is automatically extracted from the ciphertext,
+and
+.B c52
+will automatically try to load a key list file named either
+.IR Date.c52key
+in the directory specified with the
+.B \-t
+option.
+.br
+
+.br
+In either case, a default key setting may be specified with the
+.B \-k
+option, and it will be used if a key file cannot be loaded automatically.
+.
+.TP
+.B \-c
+Cipher mode: Read plaintext from InFile or stdin, encipher it, and write
+ciphertext to OutFile or stdout.
+.
+.TP
+.B \-d
+Decipher mode: Read ciphertext from InFile or stdin, decipher it, and write
+plaintext to OutFile or stdout.
+.
+.TP
+.B \-g
+Generate random key setting. Use the
+.B \-p
+option to write the resulting key setting to OutFile or stdout.
+.
+.TP
+.B \-x
+Geneate keys for use with the
+.B CX\-52.
+Use with the
+.B \-g
+option.
+.
+.TP
+.BI \-i " i1 i2 i3 i4 i5 i6"
+Set initial wheel positions based on the following six arguments,
+which must each be a single alphabetic character.
+.
+.TP
+.BI \-l " Date"
+Use the specified Date, which must be a string in ISO format.
+.
+.TP
+.TP
+.B \-o " PrintOffset"
+A letter between A and Z.  An A indicates no print offset.
+.B \-p
+Print key setting to OutFile or stdout.
+The resulting output may be redirected to a file, and is suitable for
+loading into
+.B c52
+using either the
+.B \-a
+or
+.B \-k
+options. A net indicator and/or date will be included
+in the output if specified with the
+.B \-n
+and/or
+.B \-l
+options.
+.
+.TP
+.BI \-t " KeyDir"
+Specify the directory in which to search for key files when using the
+.B \-a
+option.
+.
+Defaults to current directory.
+.
+.TP
+.BI \-s " n"
+Skip
+.I n
+leading characters in input stream. Useful to skip message indicators
+in formats which are not supported by the
+.B \-a
+option.
+.
+.TP
+.BI \-\-fileIn " InFile"
+Use file
+.I InFile
+for input.  Use stdin otherwise.
+.
+.TP
+.BI \-\-fileOut " OutFile"
+Use file
+.I OutFile
+for output.  Use stdout otherwise.
+.
+.TP
+.B \-v
+Print verbose debugging messages to stderr.
+.
+.TP
+.B \-q
+Suppress information messages which are normally printed to stderr.
+.
+.TP
+.B \-\-version | \-V
+Print program version and copyright information to stderr, then exit.
+.
+.TP
+.B \-\-help | \-h
+Print program version, copyright and usage instructions to stderr,
+then exit.
+.
+.SH FILES
+.
+.PP
+Key setting files generated by
+.B c52
+using the
+.B \-p
+option are ordinary human-readable plain ASCII text files.
+.B c52
+Expected
+lines are required to be in all upper case, so using mixed case
+in arbitrary text lines guarantees that they will be ignored.
+.
+.PP
+Here is a sample key table, in the format that
+.B c52
+expects:
+.
+.IP
+.ft C
+.ps -2
+----------------------------------
+.br
+       C52NET  2019-Oct-15
+.br
+----------------------------------
+.br
+26 29 46 38 37 47  NR  1 2 3 4 5 6
+.br
+----------------------------------
+.br
+01 -- -- -- 01 --  01  1 - - - - -
+.br
+02 -- 02 -- -- --  02  1 2 - - - -
+.br
+-- 03 -- 03 -- --  03  1 2 3 - - -
+.br
+04 -- 04 -- 04 04  04  1 2 3 4 - -
+.br
+05 05 -- -- 05 --  05  1 2 3 4 5 -
+.br
+-- -- 06 06 -- --  06  1 - - - - -
+.br
+07 07 -- -- 07 --  07  1 - - - - -
+.br
+08 -- -- -- -- 08  08  1 - - - - -
+.br
+-- -- 09 09 -- --  09  1 - - - - -
+.br
+10 10 10 -- 10 --  10  1 - - - - -
+.br
+-- -- -- 11 -- 11  11  1 - - - - -
+.br
+12 12 -- 12 -- 12  12  - 2 - - - -
+.br
+-- 13 13 -- 13 --  13  - - 3 - - -
+.br
+-- -- -- 14 -- --  14  1 - 3 - - -
+.br
+-- 15 15 -- 15 15  15  - - - 4 - -
+.br
+16 -- -- 16 -- --  16  - - - 4 - -
+.br
+17 -- 17 -- -- 17  17  - - - 4 - -
+.br
+-- -- 18 -- -- 18  18  - - - 4 - -
+.br
+-- 19 -- 19 19 --  19  1 - - 4 - -
+.br
+20 -- -- -- -- --  20  - - 3 4 - -
+.br
+-- -- 21 21 21 --  21  - - - - 5 -
+.br
+-- -- -- -- -- 22  22  - - - - 5 -
+.br
+23 23 -- -- 23 --  23  - - - - 5 -
+.br
+-- -- -- 24 -- --  24  - - - - 5 -
+.br
+-- 25 25 -- -- 25  25  - - - - 5 -
+.br
+-- 26 -- -- 26 --  26  - - - - 5 -
+.br
+   -- -- 27 -- --  27  - - - - 5 -
+.br
+   28 28 28 28 --  28  - - 3 - 5 -
+.br
+   29 -- 29 29 29  29  - - - 4 5 -
+.br
+      30 -- -- 30  30  - - - 4 5 -
+.br
+      31 31 31 --  31  - - - - - 6
+.br
+      32 32 32 32  32  1 - - - - 6
+.br
+      -- -- 33 --  33
+.br
+      34 34 -- 34  34
+.br
+      -- -- 35 --  35
+.br
+      36 -- -- --  36
+.br
+      37 37 -- 37  37
+.br
+      38 38    --  38
+.br
+      --       39  39
+.br
+      40       40  40
+.br
+      --       --  41
+.br
+      --       42  42
+.br
+      43       43  43
+.br
+      --       --  44
+.br
+      45       --  45
+.br
+      --       --  46
+.br
+               47  47
+.br
+----------------------------------
+.br
+PTOMG FZZQJ PIMTH ZIPFA HIDMM
+.br
+----------------------------------
+.ps
+.ft
+.
+.SH EXAMPLES
+.
+.PP
+c52 -g -l 20191015 -p >20191015.c52key
+.PP
+c52 -a -c -l 20191015 <plain.txt >cipher.txt
+.PP
+c52 -a -d <cipher.txt >deciphered.txt
+.PP
+c52 -c -k 20191015.c52key -i a b c d e f <plain.txt >cipher.txt
+.
+.SH UPDATES
+.
+.PP
+Joe Dunn's update of the hagelin project is hosted at:
+.br
+https://github.com/JoeDunnStable/hagelin.git
+.PP
+Mark Blair's hagelin project is hosted at GitLab:
+.br
+https://gitlab.com/NF6X_Crypto/hagelin
+.
+.SH SEE ALSO
+.
+https://en.wikipedia.org/wiki/C-52_(cipher_machine)
+.br
+http://www.nf6x.net/tag/hagelin
+.
+.SH COPYRIGHT
+.
+.PP
+Copyright (C) 2019 Joseph Dunn
+.br
+Copyright (C) 2009-2013 Mark J. Blair
+.PP
+c52 is part of the Hagelin project.
+.PP
+Hagelin is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+.PP
+Hagelin is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+.
+See the GNU General Public License for more details.
+.PP
+You should have received a copy of the GNU General Public License
+along with Hagelin.
+.
+If not, see <http://www.gnu.org/licenses/>.
+.
+.SH AUTHORS
+.
+.PP
+Joseph Dunn, <JoeDunn144@gmail.com>
+.br
+Mark J. Blair, NF6X <nf6x@nf6x.net>
+.br
+http://www.nf6x.net
+.

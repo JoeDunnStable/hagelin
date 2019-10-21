@@ -89,6 +89,7 @@ int main(int argc, char **argv)
   int      i;
   string    KeyDir = ".";
   string    NetIndicator;
+  bool CX52 = false;
   size_t      SkipChars = 0;
   
   // Parse command-line arguments
@@ -101,6 +102,7 @@ int main(int argc, char **argv)
   (",c", "Encipher text from cin to cout")
   (",d", "Decipher text from cin to cout")
   (",g", "generate random key setting")
+  (",x",  bool_switch(&CX52), "Generate keys for CX52")
   ("fileIn",value<string>(&FileIn),"File of text input file, cin if omitted")
   ("fileOut",value<string>(&FileOut), "File name of text output file, cout if omitted")
   (",i", value<vector<string> >(&indicator)->multitoken(),"Set initial wheel positions from following six arguments" )
@@ -142,7 +144,7 @@ int main(int argc, char **argv)
   }
   
   if (vm.count("-g")) {
-    c52.GenKey();
+    c52.GenKey(CX52);
   }
   
   if (AutoKey) {

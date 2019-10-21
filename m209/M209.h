@@ -64,7 +64,7 @@ extern bool Quiet;
 
 using namespace std;
 
-/// q e4um or lug bars together iwth a score for their fit with Appendix II of the
+/// struct with  lug bars together iwth a score for their fit with Appendix II of the
 /// Technical Manual
 struct ScoredDrum {
   array<bitset<NUM_WHEELS>, NUM_LUG_BARS> drum;
