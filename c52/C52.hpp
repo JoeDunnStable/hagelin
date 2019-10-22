@@ -142,6 +142,9 @@ public:
   //
   void PrintKey(const string& NetIndicator, date d, ostream& os = cout);
   
+  //!Export current key in Dirk Rijmenantsto format
+  void ExportKey(const string& NetIndicator, date d, ostream& os = cout);
+  
   /// Return the Drum
   DrumType getDrum() { return Drum;}
   

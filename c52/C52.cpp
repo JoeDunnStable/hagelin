@@ -252,6 +252,22 @@ void C52::PrintKey(const string& NetIndicator, date d, ostream& os) {
 
 }
 
+void C52::ExportKey(const string& NetIndicator, date d, ostream& os) {
+  os << "BC52SIM" << endl;
+  for (auto w : Wheels) {
+    for (int i=0; i<w.GetWheelSize(); ++i){
+      w.SetPosition(i);
+      os << (w.ReadPin() ? 1 : 0);
+    }
+    os << endl;
+  }
+  for (auto l : Drum) {
+    for (int i = 0; i<NUM_WHEELS; ++i)
+      os << (l[i] ? 1 : 0);
+    os << endl;
+  }
+}
+
 bool C52::LoadKey(const string& fname, string &NetIndicator, date d) {
 
   if (Verbose) {

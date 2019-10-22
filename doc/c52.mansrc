@@ -32,6 +32,9 @@ c52 \- simulate the C-52 Cipher Machine
 .RB [ \-i
 .I i1 i2 i3 i4 i5
 .IR i6 ]
+.br
+.RB [ \-o
+.IR PrintOffset ]
 .RB [ \-s
 .IR n ]
 .br
@@ -79,7 +82,8 @@ c52 \- simulate the C-52 Cipher Machine
 .B c52
 .RB [ \-v ]
 .RB [ \-q ]
-.B \-g \-p
+.B \-g
+.BR \-p | \-e
 .RB [ \-x ]
 .RB [ \-l
 .IR Date ]
@@ -224,9 +228,10 @@ which must each be a single alphabetic character.
 Use the specified Date, which must be a string in ISO format.
 .
 .TP
-.TP
-.B \-o " PrintOffset"
+.BI \-o " PrintOffset"
 A letter between A and Z.  An A indicates no print offset.
+.
+.TP
 .B \-p
 Print key setting to OutFile or stdout.
 The resulting output may be redirected to a file, and is suitable for
@@ -242,6 +247,11 @@ in the output if specified with the
 and/or
 .B \-l
 options.
+.
+.TP
+.B \-e
+Export the key setting in Dirk Rijmenants save format.
+The file will be sent to FileOut or cout if FileOut is not specified.
 .
 .TP
 .BI \-t " KeyDir"

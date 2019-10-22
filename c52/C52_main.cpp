@@ -110,7 +110,8 @@ int main(int argc, char **argv)
   (",k", value<string>(&KeyFileName), "Load key setting from specified file.")
   (",l", value<string>(&d_str), "Use specified date to lookup key in database.")
   (",n", value<string>(&NetIndicator), "Specify a net indicator for use in -a or -p modes.\nMust be a single word consisting of only letters and/or numbers.")
-  (",p", "print key settings to cout")
+  (",p", "print key settings to FileOUt or cout")
+  (",e", "export key settings in Dirk Rijmenantsto format to FileOut or cout")
   (",s", value<size_t>(&SkipChars),"Skip number of leading characters specified in following argument.")
   (",t", value<string>(&KeyDir), "Specify directory containing key files for -a mode.\nDefault is current directory.")
   (",q", bool_switch(&Quiet), "Suppress informational messages.")
@@ -129,9 +130,9 @@ int main(int argc, char **argv)
     PrintVersion(cerr);
     exit(0);
   }
-  if (vm.count("-c") + vm.count("-d")+ vm.count("-p") > 1) {
+  if (vm.count("-c") + vm.count("-d")+ vm.count("-p") +vm.count("-e")> 1) {
     // There can be atmost one owner of out
-    cerr << "m209: at most one of the options c, d and p may be used" << endl;
+    cerr << "m209: at most one of the options c, d, e and p may be used" << endl;
     exit(1);
   }
   if (vm.count("-c")) {
@@ -235,7 +236,7 @@ int main(int argc, char **argv)
   }
   ostream& out = (vm.count("fileOut")) ? fout : cout;
 
-  if (vm.count("-p")) {
+  if (vm.count("-p")>0 || vm.count("-e")) {
     if (AutoKey) {
       date now = day_clock::universal_day();
       if (!c52.LoadKey(now, NetIndicator)) {
@@ -243,7 +244,10 @@ int main(int argc, char **argv)
         exit(1);
       }
     }
-    c52.PrintKey(NetIndicator, d, out);
+    if (vm.count("-p"))
+      c52.PrintKey(NetIndicator, d, out);
+    else
+      c52.ExportKey(NetIndicator, d, out);
   }
   
   if (DoCipher) {
