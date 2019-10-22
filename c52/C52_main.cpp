@@ -238,8 +238,7 @@ int main(int argc, char **argv)
 
   if (vm.count("-p")>0 || vm.count("-e")) {
     if (AutoKey) {
-      date now = day_clock::universal_day();
-      if (!c52.LoadKey(now, NetIndicator)) {
+      if (!c52.LoadKey(d, NetIndicator)) {
         cerr << "ERROR: Unable to load key from data base" << endl;
         exit(1);
       }
