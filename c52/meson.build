@@ -50,6 +50,11 @@ test('test_c52_g_p', c52,
      args: ['-g', '-p', '-n', 'MYTEST',
             '--fileOut', meson.build_root()+'/tests/newkey_c52.txt'],
      timeout: 1000)
+test('test_c52_A_n_l_p', c52,
+     args: ['-A', '-n', 'CX52NET', '-l', '20191015',
+            '-p',
+            '--fileOut', meson.build_root()+'/tests/X_20191015.c52key'],
+            env: 'C52_KEYLIST_DIR='+meson.source_root()+'/data/')
 test('test_c52_k_e', c52,
      args: ['-k', meson.source_root()+'/tests/20191015.c52key',
             '-e',
